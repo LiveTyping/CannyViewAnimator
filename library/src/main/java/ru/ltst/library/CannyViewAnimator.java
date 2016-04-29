@@ -14,7 +14,7 @@ public class CannyViewAnimator extends FrameLayout {
 
     int indexWhichChild = 0;
 
-    private InOutAnimators inOutAnimators;
+    private Animators animators;
     private LayoutTransition layoutTransition;
 
     public CannyViewAnimator(Context context) {
@@ -29,8 +29,8 @@ public class CannyViewAnimator extends FrameLayout {
         setLayoutTransition(layoutTransition);
     }
 
-    public void setInOutAnimators(InOutAnimators inOutAnimators) {
-        this.inOutAnimators = inOutAnimators;
+    public void setAnimators(Animators animators) {
+        this.animators = animators;
     }
 
 
@@ -70,7 +70,7 @@ public class CannyViewAnimator extends FrameLayout {
                 break;
             }
         }
-        if (inOutAnimators != null) {
+        if (animators != null) {
             animate(inChildIndex, outChildIndex);
         }
     }
@@ -78,8 +78,8 @@ public class CannyViewAnimator extends FrameLayout {
     private void animate(final int inChildIndex, int outChildIndex) {
         final View inChild = getChildAt(inChildIndex);
         final View outChild = getChildAt(outChildIndex);
-        final Animator inAnimator = inOutAnimators.getInAnimator(inChild, outChild);
-        final Animator outAnimator = inOutAnimators.getOutAnimator(inChild, outChild);
+        final Animator inAnimator = animators.getInAnimator(inChild, outChild);
+        final Animator outAnimator = animators.getOutAnimator(inChild, outChild);
         layoutTransition.setAnimator(LayoutTransition.APPEARING, inAnimator);
         layoutTransition.setAnimator(LayoutTransition.DISAPPEARING, outAnimator);
         if (outAnimator != null) {
@@ -169,7 +169,7 @@ public class CannyViewAnimator extends FrameLayout {
         return getChildAt(indexWhichChild);
     }
 
-    public interface InOutAnimators {
+    public interface Animators {
         Animator getInAnimator(View inChild, View outChild);
 
         Animator getOutAnimator(View inChild, View outChild);

@@ -20,14 +20,12 @@
             android:gravity="center"
             android:text="First view"/>
 
-        <TextView
+        <ProgressBar
             android:id="@+id/main_second_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:background="@android:color/holo_blue_bright"
-            android:gravity="center"
-            android:text="Second view"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
 
         <TextView
             android:id="@+id/main_third_view"

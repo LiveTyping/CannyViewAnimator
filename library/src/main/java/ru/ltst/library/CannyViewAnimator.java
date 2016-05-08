@@ -3,6 +3,8 @@ package ru.ltst.library;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.LayoutTransition;
+import android.animation.TimeAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.annotation.IdRes;
 import android.util.AttributeSet;
@@ -10,23 +12,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CannyViewAnimator extends FrameLayout {
 
     int indexWhichChild = 0;
 
     private Animators animators;
-    private LayoutTransition layoutTransition;
+    private Map<View, Boolean> attachedList;
 
     public CannyViewAnimator(Context context) {
         super(context);
-        layoutTransition = new LayoutTransition();
-        setLayoutTransition(layoutTransition);
+        attachedList = new HashMap<>(getChildCount());
     }
 
     public CannyViewAnimator(Context context, AttributeSet attrs) {
         super(context, attrs);
-        layoutTransition = new LayoutTransition();
-        setLayoutTransition(layoutTransition);
+        attachedList = new HashMap<>(getChildCount());
     }
 
     public void setAnimators(Animators animators) {
@@ -80,19 +83,19 @@ public class CannyViewAnimator extends FrameLayout {
         final View outChild = getChildAt(outChildIndex);
         final Animator inAnimator = animators.getInAnimator(inChild, outChild);
         final Animator outAnimator = animators.getOutAnimator(inChild, outChild);
-        layoutTransition.setAnimator(LayoutTransition.APPEARING, inAnimator);
-        layoutTransition.setAnimator(LayoutTransition.DISAPPEARING, outAnimator);
-        if (outAnimator != null) {
+        if (attachedList.get(outChild) && attachedList.get(inChild) && outAnimator != null) {
             outAnimator.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    inChild.setVisibility(View.VISIBLE);
+                    outChild.setVisibility(GONE);
+                    inChild.setVisibility(VISIBLE);
+                    if (inAnimator != null) inAnimator.start();
                 }
             });
-            outChild.setVisibility(View.GONE);
+            outAnimator.start();
         } else {
-            outChild.setVisibility(View.GONE);
-            inChild.setVisibility(View.VISIBLE);
+            outChild.setVisibility(GONE);
+            inChild.setVisibility(VISIBLE);
         }
     }
 
@@ -107,6 +110,18 @@ public class CannyViewAnimator extends FrameLayout {
 
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
+        attachedList.put(child, false);
+        child.addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                attachedList.put(v, true);
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                attachedList.put(v, false);
+            }
+        });
         super.addView(child, index, params);
         if (getChildCount() == 1) {
             child.setVisibility(View.VISIBLE);

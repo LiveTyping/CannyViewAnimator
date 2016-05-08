@@ -2,11 +2,7 @@ package ru.ltst.library;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.LayoutTransition;
-import android.animation.TimeAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
-import android.support.annotation.IdRes;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +15,8 @@ public class CannyViewAnimator extends FrameLayout {
 
     int indexWhichChild = 0;
 
-    private Animators animators;
+    private InAnimator inAnimator;
+    private OutAnimator outAnimator;
     private Map<View, Boolean> attachedList;
 
     public CannyViewAnimator(Context context) {
@@ -32,12 +29,15 @@ public class CannyViewAnimator extends FrameLayout {
         attachedList = new HashMap<>(getChildCount());
     }
 
-    public void setAnimators(Animators animators) {
-        this.animators = animators;
+    public void setInAnimator(InAnimator inAnimator) {
+        this.inAnimator = inAnimator;
     }
 
+    public void setOutAnimator(OutAnimator outAnimator) {
+        this.outAnimator = outAnimator;
+    }
 
-    public void setDisplayedChildId(@IdRes int id) {
+    public void setDisplayedChildId(int id) {
         if (getDisplayedChildId() == id) {
             return;
         }
@@ -73,16 +73,14 @@ public class CannyViewAnimator extends FrameLayout {
                 break;
             }
         }
-        if (animators != null) {
-            animate(inChildIndex, outChildIndex);
-        }
+        animate(inChildIndex, outChildIndex);
     }
 
     private void animate(final int inChildIndex, int outChildIndex) {
         final View inChild = getChildAt(inChildIndex);
         final View outChild = getChildAt(outChildIndex);
-        final Animator inAnimator = animators.getInAnimator(inChild, outChild);
-        final Animator outAnimator = animators.getOutAnimator(inChild, outChild);
+        final Animator inAnimator = this.inAnimator.getInAnimator(inChild, outChild);
+        final Animator outAnimator = this.outAnimator.getOutAnimator(inChild, outChild);
         if (attachedList.get(outChild) && attachedList.get(inChild) && outAnimator != null) {
             outAnimator.addListener(new AnimatorListenerAdapter() {
                 @Override
@@ -184,9 +182,11 @@ public class CannyViewAnimator extends FrameLayout {
         return getChildAt(indexWhichChild);
     }
 
-    public interface Animators {
+    public interface InAnimator {
         Animator getInAnimator(View inChild, View outChild);
+    }
 
+    public interface OutAnimator {
         Animator getOutAnimator(View inChild, View outChild);
     }
 }

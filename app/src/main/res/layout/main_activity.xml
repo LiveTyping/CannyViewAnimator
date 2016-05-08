@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="ru.ltst.cannyviewanimator.MainActivity">
 
     <ru.ltst.library.CannyViewAnimator
         android:id="@+id/main_animator"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/main_first_view"
@@ -20,13 +22,6 @@
             android:gravity="center"
             android:text="First view"/>
 
-        <ProgressBar
-            android:id="@+id/main_second_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
-
-
         <TextView
             android:id="@+id/main_third_view"
             android:layout_width="match_parent"
@@ -34,37 +29,34 @@
             android:layout_gravity="center"
             android:background="@android:color/holo_red_light"
             android:gravity="center"
-            android:text="Third view"/>
+            android:text="Second view"/>
     </ru.ltst.library.CannyViewAnimator>
 
-    <LinearLayout
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/main_in_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:weightSum="3">
+        android:text="Select in animator"/>
 
-        <Button
-            android:id="@+id/main_first_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_weight="1"
-            android:text="First view"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/main_in_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"/>
 
-        <Button
-            android:id="@+id/main_second_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_weight="1"
-            android:text="Second view"/>
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/main_out_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select out animator"/>
 
-        <Button
-            android:id="@+id/main_third_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_weight="1"
-            android:text="Third view"/>
-    </LinearLayout>
-</FrameLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/main_out_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/main_start_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="START!"/>
+</LinearLayout>

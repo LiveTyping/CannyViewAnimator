@@ -6,22 +6,35 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.support.annotation.IdRes;
+import android.support.annotation.IntDef;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
 public class CannyViewAnimator extends FrameLayout {
 
+    public static final int SEQUENTIALLY = 1;
+    public static final int TOGETHER = 2;
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({SEQUENTIALLY, TOGETHER})
+    @interface AnimateType {
+    }
+
     int indexWhichChild = 0;
 
     private InAnimator inAnimator;
     private OutAnimator outAnimator;
     private Map<View, Boolean> attachedList;
+    private int animateType = SEQUENTIALLY;
 
     public CannyViewAnimator(Context context) {
         super(context);
@@ -41,7 +54,8 @@ public class CannyViewAnimator extends FrameLayout {
         this.outAnimator = outAnimator;
     }
 
-    public void setDisplayedChildId(int id) {
+
+    public void setDisplayedChildId(@IdRes int id) {
         if (getDisplayedChildId() == id) {
             return;
         }
@@ -93,14 +107,21 @@ public class CannyViewAnimator extends FrameLayout {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     outChild.setVisibility(GONE);
-                    inChild.setVisibility(VISIBLE);
-                    if (inAnimator != null) inAnimator.start();
+                    if (animateType == SEQUENTIALLY) {
+                        inChild.setVisibility(VISIBLE);
+                        if (inAnimator != null) inAnimator.start();
+                    }
                 }
             });
             outAnimator.start();
+            if (animateType == TOGETHER) {
+                inChild.setVisibility(VISIBLE);
+                if (inAnimator != null) inAnimator.start();
+            }
         } else {
             outChild.setVisibility(GONE);
             inChild.setVisibility(VISIBLE);
+            if (inAnimator != null) inAnimator.start();
         }
     }
 
@@ -202,6 +223,14 @@ public class CannyViewAnimator extends FrameLayout {
 
     public View getCurrentView() {
         return getChildAt(indexWhichChild);
+    }
+
+    public int getAnimateType() {
+        return animateType;
+    }
+
+    public void setAnimateType(@AnimateType int animateType) {
+        this.animateType = animateType;
     }
 
     public interface InAnimator {

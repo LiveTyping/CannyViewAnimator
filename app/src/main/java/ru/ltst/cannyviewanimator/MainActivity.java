@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements ItemViewHolder.On
 
     private void initViews() {
         animator = (CannyViewAnimator) findViewById(R.id.main_animator);
+        animator.setAnimateType(CannyViewAnimator.TOGETHER);
         inText = (TextView) findViewById(R.id.main_in_text);
         outText = (TextView) findViewById(R.id.main_out_text);
         findViewById(R.id.main_start_button).setOnClickListener(new View.OnClickListener() {

@@ -2,12 +2,16 @@ package ru.ltst.library;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,9 +83,12 @@ public class CannyViewAnimator extends FrameLayout {
     private void animate(final int inChildIndex, int outChildIndex) {
         final View inChild = getChildAt(inChildIndex);
         final View outChild = getChildAt(outChildIndex);
-        final Animator inAnimator = this.inAnimator.getInAnimator(inChild, outChild);
-        final Animator outAnimator = this.outAnimator.getOutAnimator(inChild, outChild);
+        final Animator inAnimator = this.inAnimator == null ? null
+                : this.inAnimator.getInAnimator(inChild, outChild);
+        final Animator outAnimator = this.outAnimator == null ? null
+                : this.outAnimator.getOutAnimator(inChild, outChild);
         if (attachedList.get(outChild) && attachedList.get(inChild) && outAnimator != null) {
+            addRestoreListener(outAnimator);
             outAnimator.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
@@ -97,6 +104,21 @@ public class CannyViewAnimator extends FrameLayout {
         }
     }
 
+
+    private void addRestoreListener(Animator animator) {
+        if (!(animator instanceof ValueAnimator)) return;
+        animator.addListener(new AnimatorListenerAdapter() {
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (animation instanceof ValueAnimator) {
+                    animation.removeListener(this);
+                    animation.setDuration(0);
+                    ((ValueAnimator) animation).reverse();
+                }
+            }
+        });
+    }
 
     public int getDisplayedChildId() {
         return getChildAt(getDisplayedChild()).getId();

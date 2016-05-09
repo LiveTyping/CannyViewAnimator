@@ -18,7 +18,7 @@ public class ItemViewHolder extends BindableViewHolder<DefaultCannyAnimators,
 
     @Override
     public void bindView(int position, final DefaultCannyAnimators item, final OnItemClick actionListener) {
-        ((TextView) itemView.findViewById(R.id.main_item_text)).setText(item.getName());
+        ((TextView) itemView.findViewById(R.id.main_item_text)).setText(getNormalName(item.getName()));
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -30,6 +30,11 @@ public class ItemViewHolder extends BindableViewHolder<DefaultCannyAnimators,
                 }
             }
         });
+    }
+
+    private String getNormalName(String name) {
+        name = name.replaceAll("_", " ");
+        return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
     }
 
     interface OnItemClick extends BindableViewHolder.ActionListener<DefaultCannyAnimators> {

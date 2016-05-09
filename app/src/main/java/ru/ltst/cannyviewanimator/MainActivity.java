@@ -63,13 +63,18 @@ public class MainActivity extends AppCompatActivity implements ItemViewHolder.On
     @Override
     public void onInClick(String name, CannyViewAnimator.InAnimator inAnimator) {
         animator.setInAnimator(inAnimator);
-        inText.setText("Selected " + name);
+        inText.setText("Selected " + getNormalName(name));
     }
 
     @Override
     public void onOutClick(String name, CannyViewAnimator.OutAnimator outAnimator) {
         animator.setOutAnimator(outAnimator);
-        outText.setText("Selected " + name);
+        outText.setText("Selected " + getNormalName(name));
+    }
+
+    private String getNormalName(String name) {
+        name = name.replaceAll("_", " ");
+        return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
     }
 
     @Override

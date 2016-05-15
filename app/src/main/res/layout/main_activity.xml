@@ -32,10 +32,40 @@
             android:text="Second view"/>
     </ru.ltst.library.CannyViewAnimator>
 
+
+    <FrameLayout
+        android:id="@+id/check_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:text="Sequentially"/>
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/main_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:clickable="false"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:text="Together"/>
+    </FrameLayout>
+
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/main_in_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:text="Select in animator"/>
 
     <android.support.v7.widget.RecyclerView
@@ -47,6 +77,8 @@
         android:id="@+id/main_out_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:text="Select out animator"/>
 
     <android.support.v7.widget.RecyclerView
@@ -58,5 +90,7 @@
         android:id="@+id/main_start_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:text="START!"/>
 </LinearLayout>

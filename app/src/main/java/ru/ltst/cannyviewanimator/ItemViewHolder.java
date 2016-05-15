@@ -7,26 +7,30 @@ import com.danil.recyclerbindableadapter.library.view.BindableViewHolder;
 
 import ru.ltst.library.CannyViewAnimator;
 import ru.ltst.library.DefaultCannyAnimators;
-import ru.ltst.library.DefaultInAnimators;
 
-public class ItemViewHolder extends BindableViewHolder<DefaultCannyAnimators,
+public class ItemViewHolder extends BindableViewHolder<MainModel,
         ItemViewHolder.OnItemClick> {
+    private final TextView mainText;
+
 
     public ItemViewHolder(View itemView) {
         super(itemView);
+        mainText = ((TextView) itemView.findViewById(R.id.main_item_text));
     }
 
     @Override
-    public void bindView(int position, final DefaultCannyAnimators item, final OnItemClick actionListener) {
-        ((TextView) itemView.findViewById(R.id.main_item_text)).setText(getNormalName(item.getName()));
+    public void bindView(int position, final MainModel item, final OnItemClick actionListener) {
+        mainText.setText(getNormalName(item.getAnimators().getName()));
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (actionListener == null) return;
-                if (item.getInAnimator() != null) {
-                    actionListener.onInClick(item.getName(), item.getInAnimator());
-                } else if (item.getOutAnimator() != null) {
-                    actionListener.onOutClick(item.getName(), item.getOutAnimator());
+                if (item.getType() == MainModel.IN) {
+                    actionListener.onInClick(item.getAnimators().getName(),
+                            item.getAnimators().getInAnimator());
+                } else if (item.getType() == MainModel.OUT) {
+                    actionListener.onOutClick(item.getAnimators().getName(),
+                            item.getAnimators().getOutAnimator());
                 }
             }
         });
@@ -37,7 +41,7 @@ public class ItemViewHolder extends BindableViewHolder<DefaultCannyAnimators,
         return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
     }
 
-    interface OnItemClick extends BindableViewHolder.ActionListener<DefaultCannyAnimators> {
+    interface OnItemClick extends BindableViewHolder.ActionListener<MainModel> {
         void onInClick(String name, CannyViewAnimator.InAnimator inAnimator);
 
         void onOutClick(String name, CannyViewAnimator.OutAnimator outAnimator);

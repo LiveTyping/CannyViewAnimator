@@ -2,10 +2,10 @@ package ru.ltst.library;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.os.Build;
 import android.support.annotation.IdRes;
 import android.support.annotation.IntDef;
 import android.util.AttributeSet;
@@ -15,9 +15,11 @@ import android.widget.FrameLayout;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+
+import ru.ltst.library.animators.property.PropertyAnimators;
+import ru.ltst.library.animators.reveal.RevealAnimators;
 
 public class CannyViewAnimator extends FrameLayout {
 
@@ -43,7 +45,23 @@ public class CannyViewAnimator extends FrameLayout {
 
     public CannyViewAnimator(Context context, AttributeSet attrs) {
         super(context, attrs);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CannyViewAnimator, 0, 0);
+        int type = a.getInt(R.styleable.CannyViewAnimator_type, 1);
+        int propertyIn = a.getInt(R.styleable.CannyViewAnimator_property_in, 0);
+        int propertyOut = a.getInt(R.styleable.CannyViewAnimator_property_out, 0);
+        int revealIn = a.getInt(R.styleable.CannyViewAnimator_reveal_in, -1);
+        int revealOut = a.getInt(R.styleable.CannyViewAnimator_reveal_out, -1);
+        a.recycle();
         attachedList = new HashMap<>(getChildCount());
+        animateType = type;
+        inAnimator = PropertyAnimators.values()[propertyIn].getInAnimator();
+        outAnimator = PropertyAnimators.values()[propertyOut].getOutAnimator();
+        if (revealIn != -1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            inAnimator = RevealAnimators.values()[revealIn].getInAnimator();
+        }
+        if (revealOut != -1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            outAnimator = RevealAnimators.values()[revealOut].getOutAnimator();
+        }
     }
 
     public void setInAnimator(InAnimator inAnimator) {

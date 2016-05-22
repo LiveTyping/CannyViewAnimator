@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".xml.XmlActivity">
+
+    <ru.ltst.library.CannyViewAnimator
+        android:id="@+id/xml_animator"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:property_in="scale_x"
+        app:property_out="scale_x"
+        app:reveal_in="top_center"
+        app:reveal_out="bottom_center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/darker_gray"
+            android:gravity="center"
+            android:text="First view"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/holo_red_light"
+            android:gravity="center"
+            android:text="Second view"/>
+    </ru.ltst.library.CannyViewAnimator>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/xml_start_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:text="START!"/>
+
+</LinearLayout>

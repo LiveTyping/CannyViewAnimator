@@ -1,4 +1,4 @@
-package ru.ltst.cannyviewanimator;
+package ru.ltst.cannyviewanimator.choose;
 
 import android.support.annotation.IntDef;
 
@@ -12,7 +12,7 @@ import ru.ltst.library.DefaultCannyAnimators;
 /**
  * Created by Danil on 15.05.2016.
  */
-public class MainModel {
+public class ChooseModel {
     public static final int IN = 0;
     public static final int OUT = 1;
 
@@ -25,7 +25,7 @@ public class MainModel {
     private int type;
     private DefaultCannyAnimators animators;
 
-    public MainModel(@Type int type, DefaultCannyAnimators animators) {
+    public ChooseModel(@Type int type, DefaultCannyAnimators animators) {
         this.type = type;
         this.animators = animators;
     }
@@ -38,12 +38,12 @@ public class MainModel {
         return animators;
     }
 
-    public static List<MainModel> getAnimators(@Type int type,
-                                               List<? extends DefaultCannyAnimators> animatorsList) {
-        ArrayList<MainModel> mainModels = new ArrayList<>(animatorsList.size());
+    public static List<ChooseModel> getAnimators(@Type int type,
+                                                 List<? extends DefaultCannyAnimators> animatorsList) {
+        ArrayList<ChooseModel> chooseModels = new ArrayList<>(animatorsList.size());
         for (DefaultCannyAnimators animators : animatorsList) {
-            mainModels.add(new MainModel(type, animators));
+            chooseModels.add(new ChooseModel(type, animators));
         }
-        return mainModels;
+        return chooseModels;
     }
 }

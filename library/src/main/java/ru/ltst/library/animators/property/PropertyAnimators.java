@@ -3,8 +3,6 @@ package ru.ltst.library.animators.property;
 import android.annotation.SuppressLint;
 import android.view.View;
 
-import java.util.ArrayList;
-
 import ru.ltst.library.CannyViewAnimator;
 import ru.ltst.library.DefaultCannyAnimators;
 

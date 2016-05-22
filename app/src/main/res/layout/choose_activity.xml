@@ -5,16 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="ru.ltst.cannyviewanimator.MainActivity">
+    tools:context=".choose.ChooseActivity">
 
     <ru.ltst.library.CannyViewAnimator
-        android:id="@+id/main_animator"
+        android:id="@+id/choose_animator"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/main_first_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -23,7 +22,6 @@
             android:text="First view"/>
 
         <TextView
-            android:id="@+id/main_third_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -34,7 +32,7 @@
 
 
     <FrameLayout
-        android:id="@+id/check_container"
+        android:id="@+id/choose_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -47,7 +45,7 @@
             android:text="Sequentially"/>
 
         <android.support.v7.widget.SwitchCompat
-            android:id="@+id/main_check"
+            android:id="@+id/choose_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -61,7 +59,7 @@
     </FrameLayout>
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/main_in_text"
+        android:id="@+id/choose_in_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -69,12 +67,12 @@
         android:text="Select in animator"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/main_in_recycler"
+        android:id="@+id/choose_in_recycler"
         android:layout_width="match_parent"
         android:layout_height="64dp"/>
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/main_out_text"
+        android:id="@+id/choose_out_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -82,12 +80,12 @@
         android:text="Select out animator"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/main_out_recycler"
+        android:id="@+id/choose_out_recycler"
         android:layout_width="match_parent"
         android:layout_height="64dp"/>
 
     <android.support.v7.widget.AppCompatButton
-        android:id="@+id/main_start_button"
+        android:id="@+id/choose_start_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/activity_horizontal_margin"

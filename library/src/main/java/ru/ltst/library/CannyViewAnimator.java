@@ -40,8 +40,8 @@ public class CannyViewAnimator extends FrameLayout {
 
     int indexWhichChild = 0;
 
-    private List<InAnimator> inAnimator;
-    private List<OutAnimator> outAnimator;
+    private List<? extends InAnimator> inAnimator;
+    private List<? extends OutAnimator> outAnimator;
     private Map<View, Boolean> attachedList;
     private int animateType = SEQUENTIALLY;
 
@@ -62,14 +62,13 @@ public class CannyViewAnimator extends FrameLayout {
         attachedList = new HashMap<>(getChildCount());
         animateType = type;
         boolean preLollipop = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
-        setInAnimator(getIns((preLollipop && preLollipopIn != -1) ? preLollipopIn : in));
-        setOutAnimator(getOuts((preLollipop && preLollipopOut != -1) ? preLollipopOut : out));
+        setInAnimator(getAnimators((preLollipop && preLollipopIn != -1) ? preLollipopIn : in));
+        setOutAnimator(getAnimators((preLollipop && preLollipopOut != -1) ? preLollipopOut : out));
     }
 
-    private ArrayList<InAnimator> getIns(int propertyIn) {
+    private ArrayList<DefaultCannyAnimators> getAnimators(int flags) {
         boolean preLollipop = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
-
-        ArrayList<InAnimator> animators = new ArrayList<>();
+        ArrayList<DefaultCannyAnimators> animators = new ArrayList<>();
         int size = PropertyAnimators.values().length;
         size = preLollipop ? size : size + RevealAnimators.values().length;
         List<DefaultCannyAnimators> defaultAnimators = new ArrayList<>(size);
@@ -77,48 +76,26 @@ public class CannyViewAnimator extends FrameLayout {
         if (!preLollipop)
             defaultAnimators.addAll(Arrays.asList(RevealAnimators.values()));
         for (int i = 0; i < size; i++) {
-            if ((propertyIn & (int) Math.pow(2, i)) == Math.pow(2, i)) {
+            if ((flags & (int) Math.pow(2, i)) == Math.pow(2, i)) {
                 animators.add(defaultAnimators.get(i));
             }
         }
         return animators;
     }
 
-    private ArrayList<OutAnimator> getOuts(int propertyOut) {
-        boolean preLollipop = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
-
-        ArrayList<OutAnimator> animators = new ArrayList<>();
-        int size = PropertyAnimators.values().length;
-        size = preLollipop ? size : size + RevealAnimators.values().length;
-        List<DefaultCannyAnimators> defaultAnimators = new ArrayList<>(size);
-        defaultAnimators.addAll(Arrays.asList(PropertyAnimators.values()));
-        if (!preLollipop)
-            defaultAnimators.addAll(Arrays.asList(RevealAnimators.values()));
-        for (int i = 0; i < size; i++) {
-            if ((propertyOut & (int) Math.pow(2, i)) == Math.pow(2, i)) {
-                animators.add(defaultAnimators.get(i));
-            }
-        }
-        return animators;
-    }
-
-    //    public final <T extends InAnimator> void setInAnimator(T... inAnimators) {
-    public final void setInAnimator(InAnimator... inAnimators) {
+    public final <T extends InAnimator> void setInAnimator(T... inAnimators) {
         setInAnimator(Arrays.asList(inAnimators));
     }
 
-    //    public void setInAnimator(List<? extends InAnimator> inAnimators) {
-    public void setInAnimator(List<InAnimator> inAnimators) {
+    public void setInAnimator(List<? extends InAnimator> inAnimators) {
         this.inAnimator = inAnimators;
     }
 
-    //    public final <T extends OutAnimator> void setOutAnimator(T... outAnimators) {
-    public final void setOutAnimator(OutAnimator... outAnimators) {
+    public final <T extends OutAnimator> void setOutAnimator(T... outAnimators) {
         setOutAnimator(Arrays.asList(outAnimators));
     }
 
-    //    public void setOutAnimator(List<? extends OutAnimator> outAnimators) {
-    public void setOutAnimator(List<OutAnimator> outAnimators) {
+    public void setOutAnimator(List<? extends OutAnimator> outAnimators) {
         this.outAnimator = outAnimators;
     }
 
@@ -166,9 +143,9 @@ public class CannyViewAnimator extends FrameLayout {
         final View inChild = getChildAt(inChildIndex);
         final View outChild = getChildAt(outChildIndex);
         final AnimatorSet inAnimator = this.inAnimator == null ? null
-                : mergeIn(inChild, outChild);
+                : mergeAnimators(inChild, outChild, true);
         final AnimatorSet outAnimator = this.outAnimator == null ? null
-                : mergeOut(inChild, outChild);
+                : mergeAnimators(inChild, outChild, false);
         if (attachedList.get(outChild) && attachedList.get(inChild) && outAnimator != null) {
             addRestoreListener(outAnimator);
             outAnimator.addListener(new AnimatorListenerAdapter() {
@@ -193,28 +170,21 @@ public class CannyViewAnimator extends FrameLayout {
         }
     }
 
-    //@TODO
-    private AnimatorSet mergeIn(View inChild, View outChild) {
+    private AnimatorSet mergeAnimators(View inChild, View outChild, boolean isIn) {
         AnimatorSet animatorSet = new AnimatorSet();
         List<Animator> animators = new ArrayList<>(inAnimator.size());
-        for (InAnimator animator : inAnimator) {
-            animators.add(animator.getInAnimator(inChild, outChild));
+        if (isIn) {
+            for (InAnimator animator : inAnimator) {
+                animators.add(animator.getInAnimator(inChild, outChild));
+            }
+        } else {
+            for (OutAnimator animator : outAnimator) {
+                animators.add(animator.getOutAnimator(inChild, outChild));
+            }
         }
         animatorSet.playTogether(animators);
         return animatorSet;
     }
-
-    //@TODO
-    private AnimatorSet mergeOut(View inChild, View outChild) {
-        AnimatorSet animatorSet = new AnimatorSet();
-        List<Animator> animators = new ArrayList<>(outAnimator.size());
-        for (OutAnimator animator : outAnimator) {
-            animators.add(animator.getOutAnimator(inChild, outChild));
-        }
-        animatorSet.playTogether(animators);
-        return animatorSet;
-    }
-
 
     private void addRestoreListener(AnimatorSet animatorSet) {
         for (Animator animator : animatorSet.getChildAnimations()) {

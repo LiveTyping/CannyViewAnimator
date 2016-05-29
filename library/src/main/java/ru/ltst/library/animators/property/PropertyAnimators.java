@@ -1,10 +1,12 @@
 package ru.ltst.library.animators.property;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.view.View;
 
-import ru.ltst.library.CannyViewAnimator;
-import ru.ltst.library.DefaultCannyAnimators;
+import ru.ltst.library.interfaces.DefaultCannyAnimators;
+import ru.ltst.library.interfaces.InAnimator;
+import ru.ltst.library.interfaces.OutAnimator;
 
 @SuppressLint("RtlHardcoded")
 public enum PropertyAnimators implements DefaultCannyAnimators {
@@ -18,11 +20,11 @@ public enum PropertyAnimators implements DefaultCannyAnimators {
     SCALE_Y(new PropertyIn(View.SCALE_Y, 0, 1), new PropertyOut(View.SCALE_Y, 1, 0)),
     SCALE_Y_HALF(new PropertyIn(View.SCALE_Y, 0.5f, 1), new PropertyOut(View.SCALE_Y, 1, 0.5f));
 
-    private CannyViewAnimator.InAnimator inAnimator;
-    private CannyViewAnimator.OutAnimator outAnimator;
+    private InAnimator inAnimator;
+    private OutAnimator outAnimator;
 
-    PropertyAnimators(CannyViewAnimator.InAnimator inAnimator,
-                      CannyViewAnimator.OutAnimator outAnimator) {
+    PropertyAnimators(InAnimator inAnimator,
+                      OutAnimator outAnimator) {
         this.inAnimator = inAnimator;
         this.outAnimator = outAnimator;
     }
@@ -31,12 +33,14 @@ public enum PropertyAnimators implements DefaultCannyAnimators {
         return name();
     }
 
+
     @Override
-    public CannyViewAnimator.InAnimator getInAnimator() {
-        return inAnimator;
+    public Animator getInAnimator(View inChild, View outChild) {
+        return inAnimator.getInAnimator(inChild, outChild);
     }
 
-    public CannyViewAnimator.OutAnimator getOutAnimator() {
-        return outAnimator;
+    @Override
+    public Animator getOutAnimator(View inChild, View outChild) {
+        return outAnimator.getOutAnimator(inChild, outChild);
     }
 }

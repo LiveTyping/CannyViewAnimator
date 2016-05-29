@@ -1,13 +1,15 @@
 package ru.ltst.library.animators.property;
 
 import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.animation.PropertyValuesHolder;
 import android.util.Property;
 import android.view.View;
 
-import ru.ltst.library.CannyViewAnimator;
+import ru.ltst.library.interfaces.InAnimator;
+import ru.ltst.library.interfaces.OutAnimator;
 
-public class PropertyOut extends PropertyCanny implements CannyViewAnimator.OutAnimator {
+public class PropertyOut extends PropertyCanny implements OutAnimator {
 
     public PropertyOut(PropertyValuesHolder... holders) {
         super(holders);
@@ -25,4 +27,5 @@ public class PropertyOut extends PropertyCanny implements CannyViewAnimator.OutA
     public Animator getOutAnimator(View inChild, View outChild) {
         return getPropertyAnimator(outChild);
     }
+
 }

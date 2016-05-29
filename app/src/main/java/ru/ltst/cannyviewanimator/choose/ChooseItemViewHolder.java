@@ -7,6 +7,8 @@ import com.danil.recyclerbindableadapter.library.view.BindableViewHolder;
 
 import ru.ltst.cannyviewanimator.R;
 import ru.ltst.library.CannyViewAnimator;
+import ru.ltst.library.interfaces.InAnimator;
+import ru.ltst.library.interfaces.OutAnimator;
 
 public class ChooseItemViewHolder extends BindableViewHolder<ChooseModel,
         ChooseItemViewHolder.OnItemClick> {
@@ -27,10 +29,10 @@ public class ChooseItemViewHolder extends BindableViewHolder<ChooseModel,
                 if (actionListener == null) return;
                 if (item.getType() == ChooseModel.IN) {
                     actionListener.onInClick(item.getAnimators().getName(),
-                            item.getAnimators().getInAnimator());
+                            item.getAnimators());
                 } else if (item.getType() == ChooseModel.OUT) {
                     actionListener.onOutClick(item.getAnimators().getName(),
-                            item.getAnimators().getOutAnimator());
+                            item.getAnimators());
                 }
             }
         });
@@ -42,8 +44,8 @@ public class ChooseItemViewHolder extends BindableViewHolder<ChooseModel,
     }
 
     interface OnItemClick extends BindableViewHolder.ActionListener<ChooseModel> {
-        void onInClick(String name, CannyViewAnimator.InAnimator inAnimator);
+        void onInClick(String name, InAnimator inAnimator);
 
-        void onOutClick(String name, CannyViewAnimator.OutAnimator outAnimator);
+        void onOutClick(String name, OutAnimator outAnimator);
     }
 }

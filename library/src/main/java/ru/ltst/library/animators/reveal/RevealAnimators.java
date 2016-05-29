@@ -1,12 +1,15 @@
 package ru.ltst.library.animators.reveal;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.view.Gravity;
+import android.view.View;
 
-import ru.ltst.library.CannyViewAnimator;
-import ru.ltst.library.DefaultCannyAnimators;
+import ru.ltst.library.interfaces.DefaultCannyAnimators;
+import ru.ltst.library.interfaces.InAnimator;
+import ru.ltst.library.interfaces.OutAnimator;
 
 /**
  * Created by Danil on 09.05.2016.
@@ -34,11 +37,11 @@ public enum RevealAnimators implements DefaultCannyAnimators {
             new RevealOut(Gravity.CENTER));
 
 
-    private CannyViewAnimator.InAnimator inAnimator;
-    private CannyViewAnimator.OutAnimator outAnimator;
+    private InAnimator inAnimator;
+    private OutAnimator outAnimator;
 
-    RevealAnimators(CannyViewAnimator.InAnimator inAnimator,
-                    CannyViewAnimator.OutAnimator outAnimator) {
+    RevealAnimators(InAnimator inAnimator,
+                    OutAnimator outAnimator) {
         this.inAnimator = inAnimator;
         this.outAnimator = outAnimator;
     }
@@ -48,14 +51,15 @@ public enum RevealAnimators implements DefaultCannyAnimators {
         return name();
     }
 
-    public CannyViewAnimator.InAnimator getInAnimator() {
-        return inAnimator;
+
+    @Override
+    public Animator getInAnimator(View inChild, View outChild) {
+        return inAnimator.getInAnimator(inChild, outChild);
     }
 
     @Override
-    public CannyViewAnimator.OutAnimator getOutAnimator() {
-        return outAnimator;
+    public Animator getOutAnimator(View inChild, View outChild) {
+        return outAnimator.getOutAnimator(inChild, outChild);
     }
-
 
 }

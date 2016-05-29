@@ -6,10 +6,10 @@ import android.os.Build;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 
-import ru.ltst.library.CannyViewAnimator;
+import ru.ltst.library.interfaces.OutAnimator;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class RevealOut extends RevealCanny implements CannyViewAnimator.OutAnimator {
+public class RevealOut extends RevealCanny implements OutAnimator {
 
     public RevealOut(int gravity) {
         super(gravity);
@@ -21,4 +21,5 @@ public class RevealOut extends RevealCanny implements CannyViewAnimator.OutAnima
         return ViewAnimationUtils.createCircularReveal(outChild, getCenterX(outChild),
                 getCenterY(outChild), outRadius, 0);
     }
+
 }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".xml.XmlActivity">
 
@@ -13,10 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:property_in="scale_x"
-        app:property_out="scale_x"
-        app:reveal_in="top_center"
-        app:reveal_out="bottom_center">
+        app:pre_lollipop_in="scale_x|scale_y|alpha"
+        app:pre_lollipop_out="scale_x|scale_y|alpha"
+        app:in="alpha|circular_center"
+        app:out="alpha|circular_center"
+        app:type="sequentially">
 
         <TextView
             android:layout_width="match_parent"

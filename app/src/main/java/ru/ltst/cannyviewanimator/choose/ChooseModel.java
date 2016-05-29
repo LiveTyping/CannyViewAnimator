@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.ltst.library.DefaultCannyAnimators;
+import ru.ltst.library.interfaces.DefaultCannyAnimators;
 
 /**
  * Created by Danil on 15.05.2016.

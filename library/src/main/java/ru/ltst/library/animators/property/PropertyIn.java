@@ -1,13 +1,14 @@
 package ru.ltst.library.animators.property;
 
 import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.animation.PropertyValuesHolder;
 import android.util.Property;
 import android.view.View;
 
-import ru.ltst.library.CannyViewAnimator;
+import ru.ltst.library.interfaces.InAnimator;
 
-public class PropertyIn extends PropertyCanny implements CannyViewAnimator.InAnimator {
+public class PropertyIn extends PropertyCanny implements InAnimator {
 
     public PropertyIn(PropertyValuesHolder... holders) {
         super(holders);

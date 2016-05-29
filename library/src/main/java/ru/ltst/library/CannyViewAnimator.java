@@ -2,6 +2,7 @@ package ru.ltst.library;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -15,11 +16,17 @@ import android.widget.FrameLayout;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ru.ltst.library.animators.property.PropertyAnimators;
 import ru.ltst.library.animators.reveal.RevealAnimators;
+import ru.ltst.library.interfaces.DefaultCannyAnimators;
+import ru.ltst.library.interfaces.InAnimator;
+import ru.ltst.library.interfaces.OutAnimator;
 
 public class CannyViewAnimator extends FrameLayout {
 
@@ -33,8 +40,8 @@ public class CannyViewAnimator extends FrameLayout {
 
     int indexWhichChild = 0;
 
-    private InAnimator inAnimator;
-    private OutAnimator outAnimator;
+    private List<InAnimator> inAnimator;
+    private List<OutAnimator> outAnimator;
     private Map<View, Boolean> attachedList;
     private int animateType = SEQUENTIALLY;
 
@@ -47,31 +54,73 @@ public class CannyViewAnimator extends FrameLayout {
         super(context, attrs);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CannyViewAnimator, 0, 0);
         int type = a.getInt(R.styleable.CannyViewAnimator_type, 1);
-        int propertyIn = a.getInt(R.styleable.CannyViewAnimator_property_in, 0);
-        int propertyOut = a.getInt(R.styleable.CannyViewAnimator_property_out, 0);
-        int revealIn = a.getInt(R.styleable.CannyViewAnimator_reveal_in, -1);
-        int revealOut = a.getInt(R.styleable.CannyViewAnimator_reveal_out, -1);
+        int preLollipopIn = a.getInt(R.styleable.CannyViewAnimator_pre_lollipop_in, -1);
+        int preLollipopOut = a.getInt(R.styleable.CannyViewAnimator_pre_lollipop_out, -1);
+        int in = a.getInt(R.styleable.CannyViewAnimator_in, 0);
+        int out = a.getInt(R.styleable.CannyViewAnimator_out, 0);
         a.recycle();
         attachedList = new HashMap<>(getChildCount());
         animateType = type;
-        inAnimator = PropertyAnimators.values()[propertyIn].getInAnimator();
-        outAnimator = PropertyAnimators.values()[propertyOut].getOutAnimator();
-        if (revealIn != -1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            inAnimator = RevealAnimators.values()[revealIn].getInAnimator();
+        boolean preLollipop = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
+        setInAnimator(getIns((preLollipop && preLollipopIn != -1) ? preLollipopIn : in));
+        setOutAnimator(getOuts((preLollipop && preLollipopOut != -1) ? preLollipopOut : out));
+    }
+
+    private ArrayList<InAnimator> getIns(int propertyIn) {
+        boolean preLollipop = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
+
+        ArrayList<InAnimator> animators = new ArrayList<>();
+        int size = PropertyAnimators.values().length;
+        size = preLollipop ? size : size + RevealAnimators.values().length;
+        List<DefaultCannyAnimators> defaultAnimators = new ArrayList<>(size);
+        defaultAnimators.addAll(Arrays.asList(PropertyAnimators.values()));
+        if (!preLollipop)
+            defaultAnimators.addAll(Arrays.asList(RevealAnimators.values()));
+        for (int i = 0; i < size; i++) {
+            if ((propertyIn & (int) Math.pow(2, i)) == Math.pow(2, i)) {
+                animators.add(defaultAnimators.get(i));
+            }
         }
-        if (revealOut != -1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            outAnimator = RevealAnimators.values()[revealOut].getOutAnimator();
+        return animators;
+    }
+
+    private ArrayList<OutAnimator> getOuts(int propertyOut) {
+        boolean preLollipop = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
+
+        ArrayList<OutAnimator> animators = new ArrayList<>();
+        int size = PropertyAnimators.values().length;
+        size = preLollipop ? size : size + RevealAnimators.values().length;
+        List<DefaultCannyAnimators> defaultAnimators = new ArrayList<>(size);
+        defaultAnimators.addAll(Arrays.asList(PropertyAnimators.values()));
+        if (!preLollipop)
+            defaultAnimators.addAll(Arrays.asList(RevealAnimators.values()));
+        for (int i = 0; i < size; i++) {
+            if ((propertyOut & (int) Math.pow(2, i)) == Math.pow(2, i)) {
+                animators.add(defaultAnimators.get(i));
+            }
         }
+        return animators;
     }
 
-    public void setInAnimator(InAnimator inAnimator) {
-        this.inAnimator = inAnimator;
+    //    public final <T extends InAnimator> void setInAnimator(T... inAnimators) {
+    public final void setInAnimator(InAnimator... inAnimators) {
+        setInAnimator(Arrays.asList(inAnimators));
     }
 
-    public void setOutAnimator(OutAnimator outAnimator) {
-        this.outAnimator = outAnimator;
+    //    public void setInAnimator(List<? extends InAnimator> inAnimators) {
+    public void setInAnimator(List<InAnimator> inAnimators) {
+        this.inAnimator = inAnimators;
     }
 
+    //    public final <T extends OutAnimator> void setOutAnimator(T... outAnimators) {
+    public final void setOutAnimator(OutAnimator... outAnimators) {
+        setOutAnimator(Arrays.asList(outAnimators));
+    }
+
+    //    public void setOutAnimator(List<? extends OutAnimator> outAnimators) {
+    public void setOutAnimator(List<OutAnimator> outAnimators) {
+        this.outAnimator = outAnimators;
+    }
 
     public void setDisplayedChildId(@IdRes int id) {
         if (getDisplayedChildId() == id) {
@@ -112,13 +161,14 @@ public class CannyViewAnimator extends FrameLayout {
         animate(inChildIndex, outChildIndex);
     }
 
+    //TODO
     private void animate(final int inChildIndex, int outChildIndex) {
         final View inChild = getChildAt(inChildIndex);
         final View outChild = getChildAt(outChildIndex);
-        final Animator inAnimator = this.inAnimator == null ? null
-                : this.inAnimator.getInAnimator(inChild, outChild);
-        final Animator outAnimator = this.outAnimator == null ? null
-                : this.outAnimator.getOutAnimator(inChild, outChild);
+        final AnimatorSet inAnimator = this.inAnimator == null ? null
+                : mergeIn(inChild, outChild);
+        final AnimatorSet outAnimator = this.outAnimator == null ? null
+                : mergeOut(inChild, outChild);
         if (attachedList.get(outChild) && attachedList.get(inChild) && outAnimator != null) {
             addRestoreListener(outAnimator);
             outAnimator.addListener(new AnimatorListenerAdapter() {
@@ -143,20 +193,42 @@ public class CannyViewAnimator extends FrameLayout {
         }
     }
 
+    //@TODO
+    private AnimatorSet mergeIn(View inChild, View outChild) {
+        AnimatorSet animatorSet = new AnimatorSet();
+        List<Animator> animators = new ArrayList<>(inAnimator.size());
+        for (InAnimator animator : inAnimator) {
+            animators.add(animator.getInAnimator(inChild, outChild));
+        }
+        animatorSet.playTogether(animators);
+        return animatorSet;
+    }
 
-    private void addRestoreListener(Animator animator) {
-        if (!(animator instanceof ValueAnimator)) return;
-        animator.addListener(new AnimatorListenerAdapter() {
+    //@TODO
+    private AnimatorSet mergeOut(View inChild, View outChild) {
+        AnimatorSet animatorSet = new AnimatorSet();
+        List<Animator> animators = new ArrayList<>(outAnimator.size());
+        for (OutAnimator animator : outAnimator) {
+            animators.add(animator.getOutAnimator(inChild, outChild));
+        }
+        animatorSet.playTogether(animators);
+        return animatorSet;
+    }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if (animation instanceof ValueAnimator) {
-                    animation.removeListener(this);
-                    animation.setDuration(0);
-                    ((ValueAnimator) animation).reverse();
-                }
+
+    private void addRestoreListener(AnimatorSet animatorSet) {
+        for (Animator animator : animatorSet.getChildAnimations()) {
+            if (animator instanceof ValueAnimator) {
+                animator.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        animation.removeListener(this);
+                        animation.setDuration(0);
+                        ((ValueAnimator) animation).reverse();
+                    }
+                });
             }
-        });
+        }
     }
 
     public int getDisplayedChildId() {
@@ -249,13 +321,5 @@ public class CannyViewAnimator extends FrameLayout {
 
     public void setAnimateType(@AnimateType int animateType) {
         this.animateType = animateType;
-    }
-
-    public interface InAnimator {
-        Animator getInAnimator(View inChild, View outChild);
-    }
-
-    public interface OutAnimator {
-        Animator getOutAnimator(View inChild, View outChild);
     }
 }

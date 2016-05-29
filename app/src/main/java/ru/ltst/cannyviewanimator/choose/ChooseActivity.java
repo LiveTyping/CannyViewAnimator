@@ -18,9 +18,11 @@ import java.util.List;
 
 import ru.ltst.cannyviewanimator.R;
 import ru.ltst.library.CannyViewAnimator;
-import ru.ltst.library.DefaultCannyAnimators;
+import ru.ltst.library.interfaces.DefaultCannyAnimators;
 import ru.ltst.library.animators.property.PropertyAnimators;
 import ru.ltst.library.animators.reveal.RevealAnimators;
+import ru.ltst.library.interfaces.InAnimator;
+import ru.ltst.library.interfaces.OutAnimator;
 
 public class ChooseActivity extends AppCompatActivity implements ChooseItemViewHolder.OnItemClick {
 
@@ -74,13 +76,13 @@ public class ChooseActivity extends AppCompatActivity implements ChooseItemViewH
     }
 
     @Override
-    public void onInClick(String name, CannyViewAnimator.InAnimator inAnimator) {
+    public void onInClick(String name, InAnimator inAnimator) {
         animator.setInAnimator(inAnimator);
         inText.setText("Selected In " + getNormalName(name));
     }
 
     @Override
-    public void onOutClick(String name, CannyViewAnimator.OutAnimator outAnimator) {
+    public void onOutClick(String name, OutAnimator outAnimator) {
         animator.setOutAnimator(outAnimator);
         outText.setText("Selected Out " + getNormalName(name));
     }

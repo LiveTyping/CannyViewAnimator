@@ -1,4 +1,4 @@
-package com.livetyping.cannyviewanimator.choose;
+package com.livetyping.cannyviewanimator.choose.list;
 
 import android.support.annotation.IntDef;
 
@@ -13,36 +13,29 @@ import com.livetyping.library.interfaces.DefaultCannyAnimators;
  * Created by Danil on 15.05.2016.
  */
 public class ChooseModel {
-    public static final int IN = 0;
-    public static final int OUT = 1;
-
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef({IN, OUT})
-    @interface Type {
-    }
-
-    @Type
-    private int type;
     private DefaultCannyAnimators animators;
+    private boolean checked;
 
-    public ChooseModel(@Type int type, DefaultCannyAnimators animators) {
-        this.type = type;
+    public ChooseModel(DefaultCannyAnimators animators) {
         this.animators = animators;
     }
 
-    public int getType() {
-        return type;
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 
     public DefaultCannyAnimators getAnimators() {
         return animators;
     }
 
-    public static List<ChooseModel> getAnimators(@Type int type,
-                                                 List<? extends DefaultCannyAnimators> animatorsList) {
+    public static List<ChooseModel> getAnimators(List<? extends DefaultCannyAnimators> animatorsList) {
         ArrayList<ChooseModel> chooseModels = new ArrayList<>(animatorsList.size());
         for (DefaultCannyAnimators animators : animatorsList) {
-            chooseModels.add(new ChooseModel(type, animators));
+            chooseModels.add(new ChooseModel(animators));
         }
         return chooseModels;
     }

@@ -8,16 +8,18 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.livetyping.cannyviewanimator.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.livetyping.cannyviewanimator.choose.ChooseActivity"/>
-        <activity android:name="com.livetyping.cannyviewanimator.xml.XmlActivity"/>
-
+        <activity android:name=".choose.ChooseActivity"/>
+        <activity
+            android:name=".choose.list.ChooseListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".xml.XmlActivity"/>
     </application>
 
 </manifest>

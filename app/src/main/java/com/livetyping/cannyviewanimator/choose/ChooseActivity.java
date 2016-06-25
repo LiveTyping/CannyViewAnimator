@@ -1,35 +1,30 @@
 package com.livetyping.cannyviewanimator.choose;
 
-import android.os.Build;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.danil.recyclerbindableadapter.library.SimpleBindableAdapter;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import com.livetyping.cannyviewanimator.R;
+import com.livetyping.cannyviewanimator.RequestResultCodes;
+import com.livetyping.cannyviewanimator.choose.list.ChooseListActivity;
 import com.livetyping.library.CannyViewAnimator;
-import com.livetyping.library.interfaces.DefaultCannyAnimators;
 import com.livetyping.library.animators.property.PropertyAnimators;
 import com.livetyping.library.animators.reveal.RevealAnimators;
-import com.livetyping.library.interfaces.InAnimator;
-import com.livetyping.library.interfaces.OutAnimator;
+import com.livetyping.library.interfaces.DefaultCannyAnimators;
 
-public class ChooseActivity extends AppCompatActivity implements ChooseItemViewHolder.OnItemClick {
+import java.util.ArrayList;
+import java.util.List;
+
+public class ChooseActivity extends AppCompatActivity {
 
     private CannyViewAnimator animator;
-    private TextView inText, outText, startButton;
+    private TextView inButton, outButton, startButton;
     private SwitchCompat typeCheck;
-    private RecyclerView inRecycler, outRecycler;
     private FrameLayout checkContainer;
 
     @Override
@@ -42,12 +37,10 @@ public class ChooseActivity extends AppCompatActivity implements ChooseItemViewH
 
     private void findViews() {
         animator = (CannyViewAnimator) findViewById(R.id.choose_animator);
-        inText = (TextView) findViewById(R.id.choose_in_text);
-        outText = (TextView) findViewById(R.id.choose_out_text);
+        inButton = (TextView) findViewById(R.id.choose_in_button);
+        outButton = (TextView) findViewById(R.id.choose_out_button);
         checkContainer = (FrameLayout) findViewById(R.id.choose_container);
         typeCheck = (SwitchCompat) findViewById(R.id.choose_check);
-        inRecycler = (RecyclerView) findViewById(R.id.choose_in_recycler);
-        outRecycler = (RecyclerView) findViewById(R.id.choose_out_recycler);
         startButton = (TextView) findViewById(R.id.choose_start_button);
     }
 
@@ -68,45 +61,54 @@ public class ChooseActivity extends AppCompatActivity implements ChooseItemViewH
 
             }
         });
-        inRecycler.setAdapter(getAdapter(ChooseModel.IN));
-        inRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        inButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(RequestResultCodes.REQUEST_IN);
+            }
+        });
+        outButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(RequestResultCodes.REQUEST_OUT);
+            }
+        });
 
-        outRecycler.setAdapter(getAdapter(ChooseModel.OUT));
-        outRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+    }
+
+    private void startActivityForResult(int code) {
+        Intent intent = new Intent(this, ChooseListActivity.class);
+        intent.putExtra(String.valueOf(RequestResultCodes.REQUEST), code);
+        startActivityForResult(intent, RequestResultCodes.REQUEST);
     }
 
     @Override
-    public void onInClick(String name, InAnimator inAnimator) {
-        animator.setInAnimator(inAnimator);
-        inText.setText("Selected In " + getNormalName(name));
-    }
-
-    @Override
-    public void onOutClick(String name, OutAnimator outAnimator) {
-        animator.setOutAnimator(outAnimator);
-        outText.setText("Selected Out " + getNormalName(name));
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RequestResultCodes.RESULT_IN
+                && resultCode != RequestResultCodes.RESULT_OUT) return;
+        List<Integer> positionsAnimators = data
+                .getIntegerArrayListExtra(RequestResultCodes.KEY_ANIMATORS);
+        List<DefaultCannyAnimators> animators = new ArrayList<>(positionsAnimators.size());
+        String text = "";
+        for (Integer position : positionsAnimators) {
+            DefaultCannyAnimators newAnimator = position < PropertyAnimators.values().length
+                    ? PropertyAnimators.values()[position]
+                    : RevealAnimators.values()[position - PropertyAnimators.values().length];
+            animators.add(newAnimator);
+            text += getNormalName(newAnimator.getName()) + " ";
+        }
+        if (resultCode == RequestResultCodes.RESULT_IN) {
+            animator.setInAnimator(animators);
+            inButton.setText(text);
+        } else {
+            animator.setOutAnimator(animators);
+            outButton.setText(text);
+        }
     }
 
     private String getNormalName(String name) {
         name = name.replaceAll("_", " ");
         return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
-    }
-
-    private SimpleBindableAdapter getAdapter(@ChooseModel.Type int type) {
-        SimpleBindableAdapter<ChooseModel> adapter =
-                new SimpleBindableAdapter<>(R.layout.choose_item, ChooseItemViewHolder.class);
-        adapter.setActionListener(this);
-        List<DefaultCannyAnimators> items = new ArrayList<>();
-        items.addAll(Arrays.asList(PropertyAnimators.values()));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            items.addAll(Arrays.asList(RevealAnimators.values()));
-        }
-        adapter.addAll(ChooseModel.getAnimators(type, items));
-        return adapter;
-    }
-
-    @Override
-    public void OnItemClickListener(int position, ChooseModel item) {
-
     }
 }

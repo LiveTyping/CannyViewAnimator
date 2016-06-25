@@ -4,11 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/choose_item_container"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
+    android:layout_height="56dp"
     android:layout_margin="4dp"
     android:foreground="?selectableItemBackground"
     android:orientation="vertical"
-    app:cardElevation="4dp">
+    app:cardUseCompatPadding="true">
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/choose_item_text"

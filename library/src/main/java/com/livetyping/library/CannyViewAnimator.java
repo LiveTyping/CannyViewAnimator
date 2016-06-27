@@ -38,7 +38,7 @@ public class CannyViewAnimator extends FrameLayout {
     @interface AnimateType {
     }
 
-    int indexWhichChild = 0;
+    int lastWhichIndex = 0;
 
     private List<? extends InAnimator> inAnimator;
     private List<? extends OutAnimator> outAnimator;
@@ -112,68 +112,44 @@ public class CannyViewAnimator extends FrameLayout {
         throw new IllegalArgumentException("No view with ID " + id);
     }
 
-    //TODO
-    public void setDisplayedChild(int whichChild) {
-        this.indexWhichChild = whichChild;
-        if (whichChild >= getChildCount()) {
-            this.indexWhichChild = 0;
-        } else if (whichChild < 0) {
-            this.indexWhichChild = getChildCount() - 1;
+    public void setDisplayedChild(int inChildIndex) {
+        if (inChildIndex >= getChildCount()) {
+            inChildIndex = 0;
+        } else if (inChildIndex < 0) {
+            inChildIndex = getChildCount() - 1;
         }
         boolean hasFocus = getFocusedChild() != null;
-        showOnly(this.indexWhichChild);
+        final View inChild = getChildAt(inChildIndex);
+        final View outChild = getChildAt(lastWhichIndex);
+        if (!attachedList.get(outChild) || !attachedList.get(inChild)) {
+            outChild.setVisibility(INVISIBLE);
+            inChild.setVisibility(VISIBLE);
+        } else {
+            animate(inChild, outChild);
+        }
+        lastWhichIndex = inChildIndex;
         if (hasFocus) {
             requestFocus(FOCUS_FORWARD);
         }
     }
 
-    void showOnly(int inChildIndex) {
-        final int count = getChildCount();
-        int outChildIndex = 0;
-        //TODO Why cycle?
-        for (int i = 0; i < count; i++) {
-            if (getChildAt(i).getVisibility() == VISIBLE) {
-                outChildIndex = i;
-                break;
-            }
-        }
-        final View inChild = getChildAt(inChildIndex);
-        final View outChild = getChildAt(outChildIndex);
-        if (!attachedList.get(outChild) || !attachedList.get(inChild)) {
-            outChild.setVisibility(GONE);
-            inChild.setVisibility(VISIBLE);
-        } else {
-            animate(inChild, outChild);
-        }
-    }
-
     private void animate(final View inChild, final View outChild) {
-        //hack for normal working reveal animators
-        inChild.setVisibility(INVISIBLE);
-
-        final AnimatorSet outAnimator = mergeOutAnimators(inChild, outChild);
-        addRestoreListener(outAnimator);
-        outAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                outChild.setVisibility(GONE);
-                if (animateType == SEQUENTIALLY) {
-                    inAnimation(inChild, outChild);
-                }
-            }
-        });
-        outAnimator.start();
-        if (animateType == TOGETHER) {
-            inAnimation(inChild, outChild);
+        AnimatorSet animatorSet = new AnimatorSet();
+        if (animateType == SEQUENTIALLY) {
+            animatorSet.playSequentially(
+                    mergeOutAnimators(inChild, outChild),
+                    mergeInAnimators(inChild, outChild)
+            );
+        } else if (animateType == TOGETHER) {
+            animatorSet.playTogether(
+                    mergeOutAnimators(inChild, outChild),
+                    mergeInAnimators(inChild, outChild)
+            );
         }
+        animatorSet.start();
     }
 
-    private void inAnimation(View inChild, View outChild) {
-        inChild.setVisibility(VISIBLE);
-        mergeInAnimators(inChild, outChild).start();
-    }
-
-    private AnimatorSet mergeInAnimators(View inChild, View outChild) {
+    private AnimatorSet mergeInAnimators(final View inChild, View outChild) {
         AnimatorSet animatorSet = new AnimatorSet();
         List<Animator> animators = new ArrayList<>(inAnimator.size());
         for (InAnimator inAnimator : this.inAnimator) {
@@ -185,10 +161,16 @@ public class CannyViewAnimator extends FrameLayout {
             }
         }
         animatorSet.playTogether(animators);
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                inChild.setVisibility(VISIBLE);
+            }
+        });
         return animatorSet;
     }
 
-    private AnimatorSet mergeOutAnimators(View inChild, View outChild) {
+    private AnimatorSet mergeOutAnimators(View inChild, final View outChild) {
         AnimatorSet animatorSet = new AnimatorSet();
         List<Animator> animators = new ArrayList<>(outAnimator.size());
         for (OutAnimator outAnimator : this.outAnimator) {
@@ -199,6 +181,13 @@ public class CannyViewAnimator extends FrameLayout {
             }
         }
         animatorSet.playTogether(animators);
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                outChild.setVisibility(INVISIBLE);
+            }
+        });
+        addRestoreListener(animatorSet);
         return animatorSet;
     }
 
@@ -222,7 +211,7 @@ public class CannyViewAnimator extends FrameLayout {
     }
 
     public int getDisplayedChild() {
-        return indexWhichChild;
+        return lastWhichIndex;
     }
 
     @Override
@@ -243,17 +232,17 @@ public class CannyViewAnimator extends FrameLayout {
         if (getChildCount() == 1) {
             child.setVisibility(View.VISIBLE);
         } else {
-            child.setVisibility(View.GONE);
+            child.setVisibility(View.INVISIBLE);
         }
-        if (index >= 0 && indexWhichChild >= index) {
-            setDisplayedChild(indexWhichChild + 1);
+        if (index >= 0 && lastWhichIndex >= index) {
+            setDisplayedChild(lastWhichIndex + 1);
         }
     }
 
     @Override
     public void removeAllViews() {
         super.removeAllViews();
-        indexWhichChild = 0;
+        lastWhichIndex = 0;
     }
 
     @Override
@@ -269,11 +258,11 @@ public class CannyViewAnimator extends FrameLayout {
         super.removeViewAt(index);
         final int childCount = getChildCount();
         if (childCount == 0) {
-            indexWhichChild = 0;
-        } else if (indexWhichChild >= childCount) {
+            lastWhichIndex = 0;
+        } else if (lastWhichIndex >= childCount) {
             setDisplayedChild(childCount - 1);
-        } else if (indexWhichChild == index) {
-            setDisplayedChild(indexWhichChild);
+        } else if (lastWhichIndex == index) {
+            setDisplayedChild(lastWhichIndex);
         }
     }
 
@@ -286,9 +275,9 @@ public class CannyViewAnimator extends FrameLayout {
     public void removeViews(int start, int count) {
         super.removeViews(start, count);
         if (getChildCount() == 0) {
-            indexWhichChild = 0;
-        } else if (indexWhichChild >= start && indexWhichChild < start + count) {
-            setDisplayedChild(indexWhichChild);
+            lastWhichIndex = 0;
+        } else if (lastWhichIndex >= start && lastWhichIndex < start + count) {
+            setDisplayedChild(lastWhichIndex);
         }
     }
 
@@ -298,7 +287,7 @@ public class CannyViewAnimator extends FrameLayout {
     }
 
     public View getCurrentView() {
-        return getChildAt(indexWhichChild);
+        return getChildAt(lastWhichIndex);
     }
 
     public int getAnimateType() {

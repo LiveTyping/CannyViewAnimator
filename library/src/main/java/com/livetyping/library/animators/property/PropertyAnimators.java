@@ -10,7 +10,7 @@ import com.livetyping.library.interfaces.OutAnimator;
 
 @SuppressLint("RtlHardcoded")
 public enum PropertyAnimators implements DefaultCannyAnimators {
-    NULL(null, null),
+    EMPTY(new PropertyIn(), new PropertyOut()),
     //alpha
     ALPHA(new PropertyIn(View.ALPHA, 0, 1), new PropertyOut(View.ALPHA, 1, 0)),
     ALPHA_HALF(new PropertyIn(View.ALPHA, 0.5f, 1), new PropertyOut(View.ALPHA, 1, 0.5f)),

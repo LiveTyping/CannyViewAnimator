@@ -112,6 +112,7 @@ public class CannyViewAnimator extends FrameLayout {
         throw new IllegalArgumentException("No view with ID " + id);
     }
 
+    //TODO
     public void setDisplayedChild(int whichChild) {
         this.indexWhichChild = whichChild;
         if (whichChild >= getChildCount()) {
@@ -129,57 +130,72 @@ public class CannyViewAnimator extends FrameLayout {
     void showOnly(int inChildIndex) {
         final int count = getChildCount();
         int outChildIndex = 0;
+        //TODO Why cycle?
         for (int i = 0; i < count; i++) {
             if (getChildAt(i).getVisibility() == VISIBLE) {
                 outChildIndex = i;
                 break;
             }
         }
-        animate(inChildIndex, outChildIndex);
-    }
-
-    //TODO
-    private void animate(final int inChildIndex, int outChildIndex) {
         final View inChild = getChildAt(inChildIndex);
         final View outChild = getChildAt(outChildIndex);
-        final AnimatorSet inAnimator = this.inAnimator == null ? null
-                : mergeAnimators(inChild, outChild, true);
-        final AnimatorSet outAnimator = this.outAnimator == null ? null
-                : mergeAnimators(inChild, outChild, false);
-        if (attachedList.get(outChild) && attachedList.get(inChild) && outAnimator != null) {
-            addRestoreListener(outAnimator);
-            outAnimator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    outChild.setVisibility(GONE);
-                    if (animateType == SEQUENTIALLY) {
-                        inChild.setVisibility(VISIBLE);
-                        if (inAnimator != null) inAnimator.start();
-                    }
-                }
-            });
-            outAnimator.start();
-            if (animateType == TOGETHER) {
-                inChild.setVisibility(VISIBLE);
-                if (inAnimator != null) inAnimator.start();
-            }
-        } else {
+        if (!attachedList.get(outChild) || !attachedList.get(inChild)) {
             outChild.setVisibility(GONE);
             inChild.setVisibility(VISIBLE);
-            if (inAnimator != null) inAnimator.start();
+        } else {
+            animate(inChild, outChild);
         }
     }
 
-    private AnimatorSet mergeAnimators(View inChild, View outChild, boolean isIn) {
+    private void animate(final View inChild, final View outChild) {
+        //hack for normal working reveal animators
+        inChild.setVisibility(INVISIBLE);
+
+        final AnimatorSet outAnimator = mergeOutAnimators(inChild, outChild);
+        addRestoreListener(outAnimator);
+        outAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                outChild.setVisibility(GONE);
+                if (animateType == SEQUENTIALLY) {
+                    inAnimation(inChild, outChild);
+                }
+            }
+        });
+        outAnimator.start();
+        if (animateType == TOGETHER) {
+            inAnimation(inChild, outChild);
+        }
+    }
+
+    private void inAnimation(View inChild, View outChild) {
+        inChild.setVisibility(VISIBLE);
+        mergeInAnimators(inChild, outChild).start();
+    }
+
+    private AnimatorSet mergeInAnimators(View inChild, View outChild) {
         AnimatorSet animatorSet = new AnimatorSet();
         List<Animator> animators = new ArrayList<>(inAnimator.size());
-        if (isIn) {
-            for (InAnimator animator : inAnimator) {
-                animators.add(animator.getInAnimator(inChild, outChild));
+        for (InAnimator inAnimator : this.inAnimator) {
+            if (inAnimator != null) {
+                Animator animator = inAnimator.getInAnimator(inChild, outChild);
+                if (animator != null) {
+                    animators.add(animator);
+                }
             }
-        } else {
-            for (OutAnimator animator : outAnimator) {
-                animators.add(animator.getOutAnimator(inChild, outChild));
+        }
+        animatorSet.playTogether(animators);
+        return animatorSet;
+    }
+
+    private AnimatorSet mergeOutAnimators(View inChild, View outChild) {
+        AnimatorSet animatorSet = new AnimatorSet();
+        List<Animator> animators = new ArrayList<>(outAnimator.size());
+        for (OutAnimator outAnimator : this.outAnimator) {
+            if (outAnimator != null) {
+                Animator animator = outAnimator.getOutAnimator(inChild, outChild);
+                if (animator != null)
+                    animators.add(animator);
             }
         }
         animatorSet.playTogether(animators);

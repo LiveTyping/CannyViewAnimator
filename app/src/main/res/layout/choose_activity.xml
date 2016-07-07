@@ -28,6 +28,13 @@
             android:background="@android:color/holo_red_light"
             android:gravity="center"
             android:text="Second view"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/holo_blue_bright"
+            android:gravity="center"
+            android:text="Third view"/>
     </com.livetyping.library.CannyViewAnimator>
 
 

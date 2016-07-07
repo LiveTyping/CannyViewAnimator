@@ -7,12 +7,16 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
-import android.support.annotation.IdRes;
 import android.support.annotation.IntDef;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+
+import com.livetyping.library.animators.property.PropertyAnimators;
+import com.livetyping.library.animators.reveal.RevealAnimators;
+import com.livetyping.library.interfaces.DefaultCannyAnimators;
+import com.livetyping.library.interfaces.InAnimator;
+import com.livetyping.library.interfaces.OutAnimator;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -22,13 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.livetyping.library.animators.property.PropertyAnimators;
-import com.livetyping.library.animators.reveal.RevealAnimators;
-import com.livetyping.library.interfaces.DefaultCannyAnimators;
-import com.livetyping.library.interfaces.InAnimator;
-import com.livetyping.library.interfaces.OutAnimator;
-
-public class CannyViewAnimator extends FrameLayout {
+public class CannyViewAnimator extends ViewAnimator {
 
     public static final int SEQUENTIALLY = 1;
     public static final int TOGETHER = 2;
@@ -38,12 +36,11 @@ public class CannyViewAnimator extends FrameLayout {
     @interface AnimateType {
     }
 
-    int lastWhichIndex = 0;
-
     private List<? extends InAnimator> inAnimator;
     private List<? extends OutAnimator> outAnimator;
-    private Map<View, Boolean> attachedList;
     private int animateType = SEQUENTIALLY;
+    private Map<View, Boolean> attachedList;
+
 
     public CannyViewAnimator(Context context) {
         super(context);
@@ -83,6 +80,7 @@ public class CannyViewAnimator extends FrameLayout {
         return animators;
     }
 
+    @SafeVarargs
     public final <T extends InAnimator> void setInAnimator(T... inAnimators) {
         setInAnimator(Arrays.asList(inAnimators));
     }
@@ -91,6 +89,7 @@ public class CannyViewAnimator extends FrameLayout {
         this.inAnimator = inAnimators;
     }
 
+    @SafeVarargs
     public final <T extends OutAnimator> void setOutAnimator(T... outAnimators) {
         setOutAnimator(Arrays.asList(outAnimators));
     }
@@ -99,54 +98,26 @@ public class CannyViewAnimator extends FrameLayout {
         this.outAnimator = outAnimators;
     }
 
-    public void setDisplayedChildId(@IdRes int id) {
-        if (getDisplayedChildId() == id) {
-            return;
-        }
-        for (int i = 0, count = getChildCount(); i < count; i++) {
-            if (getChildAt(i).getId() == id) {
-                setDisplayedChild(i);
-                return;
-            }
-        }
-        throw new IllegalArgumentException("No view with ID " + id);
-    }
-
-    public void setDisplayedChild(int inChildIndex) {
-        if (inChildIndex >= getChildCount()) {
-            inChildIndex = 0;
-        } else if (inChildIndex < 0) {
-            inChildIndex = getChildCount() - 1;
-        }
-        boolean hasFocus = getFocusedChild() != null;
-        final View inChild = getChildAt(inChildIndex);
-        final View outChild = getChildAt(lastWhichIndex);
+    @Override
+    protected void changeVisibility(View inChild, View outChild) {
         if (!attachedList.get(outChild) || !attachedList.get(inChild)) {
             outChild.setVisibility(INVISIBLE);
             inChild.setVisibility(VISIBLE);
         } else {
-            animate(inChild, outChild);
+            AnimatorSet animatorSet = new AnimatorSet();
+            if (animateType == SEQUENTIALLY) {
+                animatorSet.playSequentially(
+                        mergeOutAnimators(inChild, outChild),
+                        mergeInAnimators(inChild, outChild)
+                );
+            } else if (animateType == TOGETHER) {
+                animatorSet.playTogether(
+                        mergeOutAnimators(inChild, outChild),
+                        mergeInAnimators(inChild, outChild)
+                );
+            }
+            animatorSet.start();
         }
-        lastWhichIndex = inChildIndex;
-        if (hasFocus) {
-            requestFocus(FOCUS_FORWARD);
-        }
-    }
-
-    private void animate(final View inChild, final View outChild) {
-        AnimatorSet animatorSet = new AnimatorSet();
-        if (animateType == SEQUENTIALLY) {
-            animatorSet.playSequentially(
-                    mergeOutAnimators(inChild, outChild),
-                    mergeInAnimators(inChild, outChild)
-            );
-        } else if (animateType == TOGETHER) {
-            animatorSet.playTogether(
-                    mergeOutAnimators(inChild, outChild),
-                    mergeInAnimators(inChild, outChild)
-            );
-        }
-        animatorSet.start();
     }
 
     private AnimatorSet mergeInAnimators(final View inChild, View outChild) {
@@ -206,12 +177,12 @@ public class CannyViewAnimator extends FrameLayout {
         }
     }
 
-    public int getDisplayedChildId() {
-        return getChildAt(getDisplayedChild()).getId();
+    public int getAnimateType() {
+        return animateType;
     }
 
-    public int getDisplayedChild() {
-        return lastWhichIndex;
+    public void setAnimateType(@AnimateType int animateType) {
+        this.animateType = animateType;
     }
 
     @Override
@@ -229,72 +200,28 @@ public class CannyViewAnimator extends FrameLayout {
             }
         });
         super.addView(child, index, params);
-        if (getChildCount() == 1) {
-            child.setVisibility(View.VISIBLE);
-        } else {
-            child.setVisibility(View.INVISIBLE);
-        }
-        if (index >= 0 && lastWhichIndex >= index) {
-            setDisplayedChild(lastWhichIndex + 1);
-        }
     }
 
     @Override
     public void removeAllViews() {
+        attachedList.clear();
         super.removeAllViews();
-        lastWhichIndex = 0;
     }
 
     @Override
     public void removeView(View view) {
-        final int index = indexOfChild(view);
-        if (index >= 0) {
-            removeViewAt(index);
-        }
+        attachedList.remove(view);
+        super.removeView(view);
     }
 
     @Override
     public void removeViewAt(int index) {
+        attachedList.remove(getChildAt(index));
         super.removeViewAt(index);
-        final int childCount = getChildCount();
-        if (childCount == 0) {
-            lastWhichIndex = 0;
-        } else if (lastWhichIndex >= childCount) {
-            setDisplayedChild(childCount - 1);
-        } else if (lastWhichIndex == index) {
-            setDisplayedChild(lastWhichIndex);
-        }
-    }
-
-    @Override
-    public void removeViewInLayout(View view) {
-        removeView(view);
     }
 
     @Override
     public void removeViews(int start, int count) {
         super.removeViews(start, count);
-        if (getChildCount() == 0) {
-            lastWhichIndex = 0;
-        } else if (lastWhichIndex >= start && lastWhichIndex < start + count) {
-            setDisplayedChild(lastWhichIndex);
-        }
-    }
-
-    @Override
-    public void removeViewsInLayout(int start, int count) {
-        removeViews(start, count);
-    }
-
-    public View getCurrentView() {
-        return getChildAt(lastWhichIndex);
-    }
-
-    public int getAnimateType() {
-        return animateType;
-    }
-
-    public void setAnimateType(@AnimateType int animateType) {
-        this.animateType = animateType;
     }
 }

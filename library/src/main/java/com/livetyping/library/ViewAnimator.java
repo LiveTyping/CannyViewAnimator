@@ -5,13 +5,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.IdRes;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 public class ViewAnimator extends FrameLayout {
-    private static final String KEY_LAST_WHICH_INDEX = "key.last.which.index";
 
     protected int lastWhichIndex = 0;
 
@@ -69,7 +67,6 @@ public class ViewAnimator extends FrameLayout {
 
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
-        Log.d("ViewAnimator", "addView");
         super.addView(child, index, params);
         if (getChildCount() == 1) {
             child.setVisibility(View.VISIBLE);
@@ -132,11 +129,9 @@ public class ViewAnimator extends FrameLayout {
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
         if (!(state instanceof SavedState)) {
-            Log.d("ViewAnimator", "onRestoreInstanceState super");
             super.onRestoreInstanceState(state);
             return;
         }
-        Log.d("ViewAnimator", "onRestoreInstanceState SavedState");
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
         lastWhichIndex = ss.lastWhichIndex;
@@ -146,7 +141,6 @@ public class ViewAnimator extends FrameLayout {
 
     @Override
     protected Parcelable onSaveInstanceState() {
-        Log.d("ViewAnimator", "onSaveInstanceState");
         SavedState savedState = new SavedState(super.onSaveInstanceState());
         savedState.lastWhichIndex = lastWhichIndex;
         return savedState;

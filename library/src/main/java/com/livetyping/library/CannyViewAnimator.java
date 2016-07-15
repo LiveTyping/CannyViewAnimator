@@ -100,10 +100,7 @@ public class CannyViewAnimator extends ViewAnimator {
 
     @Override
     protected void changeVisibility(View inChild, View outChild) {
-        if (!attachedList.get(outChild) || !attachedList.get(inChild)) {
-            outChild.setVisibility(INVISIBLE);
-            inChild.setVisibility(VISIBLE);
-        } else {
+        if (attachedList.get(outChild) && attachedList.get(inChild)) {
             AnimatorSet animatorSet = new AnimatorSet();
             if (animateType == SEQUENTIALLY) {
                 animatorSet.playSequentially(
@@ -117,6 +114,8 @@ public class CannyViewAnimator extends ViewAnimator {
                 );
             }
             animatorSet.start();
+        } else {
+            super.changeVisibility(inChild, outChild);
         }
     }
 
@@ -222,6 +221,10 @@ public class CannyViewAnimator extends ViewAnimator {
 
     @Override
     public void removeViews(int start, int count) {
+        for (int i = start; i < start + count; i++) {
+            attachedList.remove(getChildAt(i));
+        }
         super.removeViews(start, count);
     }
+
 }

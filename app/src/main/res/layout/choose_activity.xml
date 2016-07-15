@@ -69,23 +69,20 @@
         android:id="@+id/choose_in_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:text="Select in animator"/>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/choose_out_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:text="Select out animator"/>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/choose_start_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:text="START!"/>
 </android.support.v7.widget.LinearLayoutCompat>

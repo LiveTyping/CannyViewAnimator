@@ -28,17 +28,13 @@ public enum PropertyAnimators implements DefaultCannyAnimators {
     ROTATION_M360(new PropertyIn(View.ROTATION, -360, 0), new PropertyOut(View.ROTATION, 0, -360)),
     //rotation x
     ROTATION_X_90(new PropertyIn(View.ROTATION_X, 90, 0), new PropertyOut(View.ROTATION_X, 0, 90)),
-    ROTATION_X_180(new PropertyIn(View.ROTATION_X, 180, 0), new PropertyOut(View.ROTATION_X, 0, 180)),
     ROTATION_X_360(new PropertyIn(View.ROTATION_X, 360, 0), new PropertyOut(View.ROTATION_X, 0, 360)),
     ROTATION_X_M90(new PropertyIn(View.ROTATION_X, -90, 0), new PropertyOut(View.ROTATION_X, 0, -90)),
-    ROTATION_X_M180(new PropertyIn(View.ROTATION_X, -180, 0), new PropertyOut(View.ROTATION_X, 0, -180)),
     ROTATION_X_M360(new PropertyIn(View.ROTATION_X, -360, 0), new PropertyOut(View.ROTATION_X, 0, -360)),
     //rotation y
     ROTATION_Y_90(new PropertyIn(View.ROTATION_Y, 90, 0), new PropertyOut(View.ROTATION_Y, 0, 90)),
-    ROTATION_Y_180(new PropertyIn(View.ROTATION_Y, 180, 0), new PropertyOut(View.ROTATION_Y, 0, 180)),
     ROTATION_Y_360(new PropertyIn(View.ROTATION_Y, 360, 0), new PropertyOut(View.ROTATION_Y, 0, 360)),
     ROTATION_Y_M90(new PropertyIn(View.ROTATION_Y, -90, 0), new PropertyOut(View.ROTATION_Y, 0, -90)),
-    ROTATION_Y_M180(new PropertyIn(View.ROTATION_Y, -180, 0), new PropertyOut(View.ROTATION_Y, 0, -180)),
     ROTATION_Y_M360(new PropertyIn(View.ROTATION_Y, -360, 0), new PropertyOut(View.ROTATION_Y, 0, -360));
     private InAnimator inAnimator;
     private OutAnimator outAnimator;

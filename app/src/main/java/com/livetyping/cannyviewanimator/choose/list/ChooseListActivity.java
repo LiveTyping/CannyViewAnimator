@@ -48,7 +48,7 @@ public class ChooseListActivity extends AppCompatActivity implements ChooseItemV
     private void initViews() {
         recyclerView.setAdapter(getAdapter());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        toolbar.setNavigationIcon(R.drawable.ic_check);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

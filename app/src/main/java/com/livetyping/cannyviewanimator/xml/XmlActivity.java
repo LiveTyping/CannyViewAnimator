@@ -20,7 +20,7 @@ public class XmlActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                animator.setDisplayedChild(animator.getDisplayedChild() + 1);
+                animator.setDisplayedChildIndex(animator.getDisplayedChildIndex() + 1);
             }
         });
     }

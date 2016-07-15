@@ -1,6 +1,5 @@
 package com.livetyping.cannyviewanimator.choose;
 
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -48,7 +47,7 @@ public class ChooseActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                animator.setDisplayedChild(animator.getDisplayedChild() + 1);
+                animator.setDisplayedChildIndex(animator.getDisplayedChildIndex() + 1);
             }
         });
         checkContainer.setOnClickListener(new View.OnClickListener() {

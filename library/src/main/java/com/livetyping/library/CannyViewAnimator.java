@@ -39,12 +39,11 @@ public class CannyViewAnimator extends ViewAnimator {
     private List<? extends InAnimator> inAnimator;
     private List<? extends OutAnimator> outAnimator;
     private int animateType = SEQUENTIALLY;
-    private Map<View, Boolean> attachedList;
+    private final Map<View, Boolean> attachedList = new HashMap<>(getChildCount());
 
 
     public CannyViewAnimator(Context context) {
         super(context);
-        attachedList = new HashMap<>(getChildCount());
     }
 
     public CannyViewAnimator(Context context, AttributeSet attrs) {
@@ -56,7 +55,6 @@ public class CannyViewAnimator extends ViewAnimator {
         int in = a.getInt(R.styleable.CannyViewAnimator_in, 0);
         int out = a.getInt(R.styleable.CannyViewAnimator_out, 0);
         a.recycle();
-        attachedList = new HashMap<>(getChildCount());
         animateType = type;
         boolean preLollipop = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
         setInAnimator(getAnimators((preLollipop && preLollipopIn != -1) ? preLollipopIn : in));

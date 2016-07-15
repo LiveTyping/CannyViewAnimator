@@ -11,7 +11,7 @@ import android.widget.FrameLayout;
 
 public class ViewAnimator extends FrameLayout {
 
-    protected int lastWhichIndex = 0;
+    private int lastWhichIndex = 0;
 
     public ViewAnimator(Context context) {
         super(context);
@@ -21,20 +21,7 @@ public class ViewAnimator extends FrameLayout {
         super(context, attrs);
     }
 
-    public void setDisplayedChildId(@IdRes int id) {
-        if (getDisplayedChildId() == id) {
-            return;
-        }
-        for (int i = 0, count = getChildCount(); i < count; i++) {
-            if (getChildAt(i).getId() == id) {
-                setDisplayedChild(i);
-                return;
-            }
-        }
-        throw new IllegalArgumentException("No view with ID " + id);
-    }
-
-    public void setDisplayedChild(int inChildIndex) {
+    public void setDisplayedChildIndex(int inChildIndex) {
         if (inChildIndex >= getChildCount()) {
             inChildIndex = 0;
         } else if (inChildIndex < 0) {
@@ -48,21 +35,38 @@ public class ViewAnimator extends FrameLayout {
         }
     }
 
-    protected void changeVisibility(View inChild, View outChild) {
-        outChild.setVisibility(INVISIBLE);
-        inChild.setVisibility(VISIBLE);
+    public void setDisplayedChildId(@IdRes int id) {
+        if (getDisplayedChildId() == id) {
+            return;
+        }
+        for (int i = 0, count = getChildCount(); i < count; i++) {
+            if (getChildAt(i).getId() == id) {
+                setDisplayedChildIndex(i);
+                return;
+            }
+        }
+        throw new IllegalArgumentException("No view with ID " + id);
     }
 
-    public int getDisplayedChildId() {
-        return getChildAt(getDisplayedChild()).getId();
+    public void setDisplayedChild(View view) {
+        setDisplayedChildId(view.getId());
     }
 
-    public int getDisplayedChild() {
+    public int getDisplayedChildIndex() {
         return lastWhichIndex;
     }
 
-    public View getCurrentView() {
+    public View getDisplayedChild() {
         return getChildAt(lastWhichIndex);
+    }
+
+    public int getDisplayedChildId() {
+        return getDisplayedChild().getId();
+    }
+
+    protected void changeVisibility(View inChild, View outChild) {
+        outChild.setVisibility(INVISIBLE);
+        inChild.setVisibility(VISIBLE);
     }
 
     @Override
@@ -74,7 +78,7 @@ public class ViewAnimator extends FrameLayout {
             child.setVisibility(View.INVISIBLE);
         }
         if (index >= 0 && lastWhichIndex >= index) {
-            setDisplayedChild(lastWhichIndex + 1);
+            setDisplayedChildIndex(lastWhichIndex + 1);
         }
     }
 
@@ -99,9 +103,9 @@ public class ViewAnimator extends FrameLayout {
         if (childCount == 0) {
             lastWhichIndex = 0;
         } else if (lastWhichIndex >= childCount) {
-            setDisplayedChild(childCount - 1);
+            setDisplayedChildIndex(childCount - 1);
         } else if (lastWhichIndex == index) {
-            setDisplayedChild(lastWhichIndex);
+            setDisplayedChildIndex(lastWhichIndex);
         }
     }
 
@@ -116,7 +120,7 @@ public class ViewAnimator extends FrameLayout {
         if (getChildCount() == 0) {
             lastWhichIndex = 0;
         } else if (lastWhichIndex >= start && lastWhichIndex < start + count) {
-            setDisplayedChild(lastWhichIndex);
+            setDisplayedChildIndex(lastWhichIndex);
         }
     }
 
@@ -135,8 +139,7 @@ public class ViewAnimator extends FrameLayout {
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
         lastWhichIndex = ss.lastWhichIndex;
-        setDisplayedChild(lastWhichIndex);
-
+        setDisplayedChildIndex(lastWhichIndex);
     }
 
     @Override
@@ -182,7 +185,5 @@ public class ViewAnimator extends FrameLayout {
             super(in);
             this.lastWhichIndex = in.readInt();
         }
-
     }
-
 }

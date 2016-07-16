@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CannyViewAnimator extends ViewAnimator {
+public class CannyViewAnimator extends TransitionViewAnimator {
 
     public static final int SEQUENTIALLY = 1;
     public static final int TOGETHER = 2;
@@ -117,7 +117,7 @@ public class CannyViewAnimator extends ViewAnimator {
         }
     }
 
-    private AnimatorSet mergeInAnimators(final View inChild, View outChild) {
+    private AnimatorSet mergeInAnimators(final View inChild, final View outChild) {
         AnimatorSet animatorSet = new AnimatorSet();
         List<Animator> animators = new ArrayList<>(inAnimator.size());
         for (InAnimator inAnimator : this.inAnimator) {
@@ -132,13 +132,14 @@ public class CannyViewAnimator extends ViewAnimator {
         animatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
+                prepareTransition(inChild, outChild);
                 inChild.setVisibility(VISIBLE);
             }
         });
         return animatorSet;
     }
 
-    private AnimatorSet mergeOutAnimators(View inChild, final View outChild) {
+    private AnimatorSet mergeOutAnimators(final View inChild, final View outChild) {
         AnimatorSet animatorSet = new AnimatorSet();
         List<Animator> animators = new ArrayList<>(outAnimator.size());
         for (OutAnimator outAnimator : this.outAnimator) {
@@ -152,6 +153,7 @@ public class CannyViewAnimator extends ViewAnimator {
         animatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
+                prepareTransition(inChild, outChild);
                 outChild.setVisibility(INVISIBLE);
             }
         });

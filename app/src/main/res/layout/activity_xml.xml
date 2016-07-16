@@ -13,36 +13,24 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:pre_lollipop_in="scale_x|scale_y|alpha"
-        app:pre_lollipop_out="scale_x|scale_y|alpha"
         app:in="alpha|circular_center"
         app:out="alpha|circular_center"
+        app:pre_lollipop_in="scale_x|scale_y|alpha"
+        app:pre_lollipop_out="scale_x|scale_y|alpha"
         app:type="sequentially">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:background="@android:color/darker_gray"
-            android:gravity="center"
-            android:text="First view"/>
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/CannyExampleView.FirstView"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:background="@android:color/holo_red_light"
-            android:gravity="center"
-            android:text="Second view"/>
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/CannyExampleView.SecondView"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/CannyExampleView.ThirdView"/>
     </com.livetyping.library.CannyViewAnimator>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/xml_start_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:text="START!"/>
+        style="@style/Widget.AppCompat.Button.Colored.StartButton"/>
 
 </LinearLayout>

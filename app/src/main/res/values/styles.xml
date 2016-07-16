@@ -14,4 +14,40 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="Widget.AppCompat.Button.Borderless.Colored.MainActivityButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="CannyExampleView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="CannyExampleView.FirstView">
+        <item name="android:background">@color/primary</item>
+        <item name="android:text">@string/app_first_view</item>
+    </style>
+
+    <style name="CannyExampleView.SecondView">
+        <item name="android:background">@color/accent</item>
+        <item name="android:text">@string/app_second_view</item>
+    </style>
+
+    <style name="CannyExampleView.ThirdView">
+        <item name="android:background">@color/primary_light</item>
+        <item name="android:text">@string/app_third_view</item>
+    </style>
+
+    <style name="Widget.AppCompat.Button.Colored.StartButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
+        <item name="android:text">@string/app_start</item>
+    </style>
+
 </resources>

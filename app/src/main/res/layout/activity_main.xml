@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,50 +11,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.livetyping.cannyviewanimator.MainActivity">
 
-    <android.support.v7.widget.CardView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/main_activity_start_xml"
-        android:layout_width="match_parent"
-        android:layout_height="128dp"
-        android:foreground="?selectableItemBackground"
-        app:cardUseCompatPadding="true">
+        style="@style/Widget.AppCompat.Button.Borderless.Colored.MainActivityButton"
+        android:text="@string/main_xml_example"/>
 
-        <android.support.v7.widget.AppCompatTextView
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="false"
-            android:gravity="center"
-            android:text="Xml example"/>
-    </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.CardView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/main_activity_start_transition"
-        android:layout_width="match_parent"
-        android:layout_height="128dp"
-        app:cardUseCompatPadding="true">
+        style="@style/Widget.AppCompat.Button.Borderless.Colored.MainActivityButton"
+        android:text="@string/main_transition_example"/>
 
-        <android.support.v7.widget.AppCompatTextView
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="false"
-            android:gravity="center"
-            android:text="Transition example"/>
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/main_activity_start_choose"
-        android:layout_width="match_parent"
-        android:layout_height="128dp"
-        app:cardUseCompatPadding="true">
-
-        <android.support.v7.widget.AppCompatTextView
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="false"
-            android:gravity="center"
-            android:text="Choose your animation!"/>
-    </android.support.v7.widget.CardView>
-
+        style="@style/Widget.AppCompat.Button.Borderless.Colored.MainActivityButton"
+        android:text="@string/main_choose_your_animation"/>
 </LinearLayout>

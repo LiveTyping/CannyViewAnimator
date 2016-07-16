@@ -14,27 +14,13 @@
         android:layout_weight="1">
 
         <android.support.v7.widget.AppCompatTextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:background="@android:color/darker_gray"
-            android:gravity="center"
-            android:text="First view"/>
+            style="@style/CannyExampleView.FirstView"/>
 
         <android.support.v7.widget.AppCompatTextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:background="@android:color/holo_red_light"
-            android:gravity="center"
-            android:text="Second view"/>
+            style="@style/CannyExampleView.SecondView"/>
+
         <android.support.v7.widget.AppCompatTextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:background="@android:color/holo_blue_bright"
-            android:gravity="center"
-            android:text="Third view"/>
+            style="@style/CannyExampleView.ThirdView"/>
     </com.livetyping.library.CannyViewAnimator>
 
 
@@ -67,22 +53,19 @@
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/choose_in_button"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:text="Select in animator"/>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/choose_out_button"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:text="Select out animator"/>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/choose_start_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:text="START!"/>
+        style="@style/Widget.AppCompat.Button.Colored.StartButton"/>
 </android.support.v7.widget.LinearLayoutCompat>

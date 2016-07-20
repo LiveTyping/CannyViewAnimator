@@ -134,7 +134,6 @@ public class ViewAnimator extends FrameLayout {
         removeViews(start, count);
     }
 
-
     public void bringChildToPosition(View child, int position) {
         final int index = indexOfChild(child);
         if (index >= 0 && position < getChildCount()) {
@@ -159,8 +158,6 @@ public class ViewAnimator extends FrameLayout {
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();
             }
-            requestLayout();
-            invalidate();
         }
     }
 

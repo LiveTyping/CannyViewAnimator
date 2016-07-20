@@ -160,20 +160,6 @@ public class CannyViewAnimator extends TransitionViewAnimator {
             }
         }
         animatorSet.playTogether(animators);
-//        animatorSet.addListener(new AnimatorListenerAdapter() {
-//            @Override
-//            public void onAnimationStart(Animator animation) {
-//                prepareTransition(inChild, outChild);
-//                inChild.setVisibility(VISIBLE);
-//                int childCount = getChildCount();
-//                bringChildToPosition(inChild, childCount - 1);
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                bringChildToPosition(inChild, getDisplayedChildIndex());
-//            }
-//        });
         return animatorSet;
     }
 
@@ -188,13 +174,6 @@ public class CannyViewAnimator extends TransitionViewAnimator {
             }
         }
         animatorSet.playTogether(animators);
-//        animatorSet.addListener(new AnimatorListenerAdapter() {
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                prepareTransition(inChild, outChild);
-//                outChild.setVisibility(INVISIBLE);
-//            }
-//        });
         addRestoreInitValuesListener(animatorSet);
         return animatorSet;
     }

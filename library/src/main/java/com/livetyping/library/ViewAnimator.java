@@ -136,28 +136,25 @@ public class ViewAnimator extends FrameLayout {
 
     public void bringChildToPosition(View child, int position) {
         final int index = indexOfChild(child);
-        if (index >= 0 && position < getChildCount()) {
-            try {
-                Method removeFromArray = ViewGroup.class.getDeclaredMethod("removeFromArray",
-                        int.class);
-                removeFromArray.setAccessible(true);
-                removeFromArray.invoke(this, index);
-                Method addInArray = ViewGroup.class.getDeclaredMethod("addInArray", View.class,
-                        int.class);
-                addInArray.setAccessible(true);
-                addInArray.invoke(this, child, position);
-                Field mParent = View.class.getDeclaredField("mParent");
-                mParent.setAccessible(true);
-                mParent.set(child, this);
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            }
+        if (index < 0 && position >= getChildCount()) return;
+        try {
+            Method removeFromArray = ViewGroup.class.getDeclaredMethod("removeFromArray", int.class);
+            removeFromArray.setAccessible(true);
+            removeFromArray.invoke(this, index);
+            Method addInArray = ViewGroup.class.getDeclaredMethod("addInArray", View.class, int.class);
+            addInArray.setAccessible(true);
+            addInArray.invoke(this, child, position);
+            Field mParent = View.class.getDeclaredField("mParent");
+            mParent.setAccessible(true);
+            mParent.set(child, this);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
         }
     }
 

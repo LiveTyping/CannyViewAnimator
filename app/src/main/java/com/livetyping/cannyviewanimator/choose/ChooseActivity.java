@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.livetyping.cannyviewanimator.R;
@@ -25,6 +26,7 @@ public class ChooseActivity extends AppCompatActivity {
     private TextView inButton, outButton, startButton;
     private SwitchCompat typeCheck;
     private FrameLayout checkContainer;
+    private RadioGroup locationTypeChooser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +43,10 @@ public class ChooseActivity extends AppCompatActivity {
         checkContainer = (FrameLayout) findViewById(R.id.choose_container);
         typeCheck = (SwitchCompat) findViewById(R.id.choose_check);
         startButton = (TextView) findViewById(R.id.choose_start_button);
+        locationTypeChooser = (RadioGroup) findViewById(R.id.choose_location_container);
     }
 
     private void initViews() {
-        animator.setLocationType(CannyViewAnimator.OUT_ALWAYS_TOP);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +75,23 @@ public class ChooseActivity extends AppCompatActivity {
                 startActivityForResult(RequestResultCodes.REQUEST_OUT);
             }
         });
-
+        locationTypeChooser.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.choose_location_for_position:
+                        animator.setLocationType(CannyViewAnimator.FOR_POSITION);
+                        break;
+                    case R.id.choose_location_in_always_top:
+                        animator.setLocationType(CannyViewAnimator.IN_ALWAYS_TOP);
+                        break;
+                    case R.id.choose_location_out_always_top:
+                        animator.setLocationType(CannyViewAnimator.OUT_ALWAYS_TOP);
+                        break;
+                }
+            }
+        });
+        locationTypeChooser.check(R.id.choose_location_for_position);
     }
 
     private void startActivityForResult(int code) {

@@ -23,6 +23,31 @@
             style="@style/CannyExampleView.ThirdView"/>
     </com.livetyping.library.CannyViewAnimator>
 
+    <RadioGroup
+        android:id="@+id/choose_location_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/choose_location_for_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="For position"/>
+
+        <RadioButton
+            android:id="@+id/choose_location_in_always_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="In always top"/>
+
+        <RadioButton
+            android:id="@+id/choose_location_out_always_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Out always top"/>
+    </RadioGroup>
 
     <FrameLayout
         android:id="@+id/choose_container"

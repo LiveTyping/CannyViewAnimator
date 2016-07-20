@@ -9,6 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 public class ViewAnimator extends FrameLayout {
 
     private int lastWhichIndex = 0;
@@ -28,8 +32,9 @@ public class ViewAnimator extends FrameLayout {
             inChildIndex = getChildCount() - 1;
         }
         boolean hasFocus = getFocusedChild() != null;
-        changeVisibility(getChildAt(inChildIndex), getChildAt(lastWhichIndex));
+        int outChildIndex = lastWhichIndex;
         lastWhichIndex = inChildIndex;
+        changeVisibility(getChildAt(inChildIndex), getChildAt(outChildIndex));
         if (hasFocus) {
             requestFocus(FOCUS_FORWARD);
         }
@@ -129,6 +134,35 @@ public class ViewAnimator extends FrameLayout {
         removeViews(start, count);
     }
 
+
+    public void bringChildToPosition(View child, int position) {
+        final int index = indexOfChild(child);
+        if (index >= 0 && position < getChildCount()) {
+            try {
+                Method removeFromArray = ViewGroup.class.getDeclaredMethod("removeFromArray",
+                        int.class);
+                removeFromArray.setAccessible(true);
+                removeFromArray.invoke(this, index);
+                Method addInArray = ViewGroup.class.getDeclaredMethod("addInArray", View.class,
+                        int.class);
+                addInArray.setAccessible(true);
+                addInArray.invoke(this, child, position);
+                Field mParent = View.class.getDeclaredField("mParent");
+                mParent.setAccessible(true);
+                mParent.set(child, this);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+            requestLayout();
+            invalidate();
+        }
+    }
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {

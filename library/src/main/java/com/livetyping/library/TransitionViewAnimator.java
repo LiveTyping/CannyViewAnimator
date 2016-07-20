@@ -14,6 +14,7 @@ import com.livetyping.library.interfaces.CannyTransition;
  */
 public class TransitionViewAnimator extends ViewAnimator {
     private CannyTransition cannyTransition;
+    private Transition transition;
 
     public TransitionViewAnimator(Context context) {
         super(context);
@@ -26,13 +27,18 @@ public class TransitionViewAnimator extends ViewAnimator {
     @Override
     protected void changeVisibility(View inChild, View outChild) {
         prepareTransition(inChild, outChild);
+        startTransition();
         super.changeVisibility(inChild, outChild);
     }
 
-    protected void prepareTransition(View inChild, View outChild){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-                && cannyTransition != null) {
-            Transition transition = cannyTransition.getTransition(inChild, outChild);
+    protected void prepareTransition(View inChild, View outChild) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && cannyTransition != null) {
+            transition = cannyTransition.getTransition(inChild, outChild);
+        }
+    }
+
+    public void startTransition() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && transition != null) {
             TransitionManager.beginDelayedTransition(this, transition);
         }
     }

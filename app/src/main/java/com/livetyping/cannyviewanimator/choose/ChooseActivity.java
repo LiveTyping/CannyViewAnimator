@@ -44,6 +44,7 @@ public class ChooseActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        animator.setLocationType(CannyViewAnimator.OUT_ALWAYS_TOP);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

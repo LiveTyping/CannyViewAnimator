@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="CannyViewAnimator">
-        <attr name="type">
+        <attr name="animate_type">
             <enum name="sequentially" value="1"/>
             <enum name="together" value="2"/>
+        </attr>
+        <attr name="location_type">
+            <enum name="for_position" value="1"/>
+            <enum name="in_always_top" value="2"/>
+            <enum name="out_always_top" value="3"/>
         </attr>
         <attr name="pre_lollipop_in">
             <flag name="empty" value="1"/>

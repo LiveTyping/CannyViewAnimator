@@ -30,15 +30,26 @@ public class CannyViewAnimator extends TransitionViewAnimator {
 
     public static final int SEQUENTIALLY = 1;
     public static final int TOGETHER = 2;
+    private int animateType = SEQUENTIALLY;
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({SEQUENTIALLY, TOGETHER})
     @interface AnimateType {
     }
 
+
+    public static final int FOR_POSITION = 1;
+    public static final int IN_ALWAYS_TOP = 2;
+    public static final int OUT_ALWAYS_TOP = 3;
+    private int locationType = FOR_POSITION;
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({FOR_POSITION, IN_ALWAYS_TOP, OUT_ALWAYS_TOP})
+    @interface LocationType {
+    }
+
     private List<? extends InAnimator> inAnimator;
     private List<? extends OutAnimator> outAnimator;
-    private int animateType = SEQUENTIALLY;
     private final Map<View, Boolean> attachedList = new HashMap<>(getChildCount());
 
 
@@ -49,13 +60,15 @@ public class CannyViewAnimator extends TransitionViewAnimator {
     public CannyViewAnimator(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CannyViewAnimator, 0, 0);
-        int type = a.getInt(R.styleable.CannyViewAnimator_type, 1);
+        int animateType = a.getInt(R.styleable.CannyViewAnimator_animate_type, 1);
+        int locationType = a.getInt(R.styleable.CannyViewAnimator_location_type, 1);
         int preLollipopIn = a.getInt(R.styleable.CannyViewAnimator_pre_lollipop_in, -1);
         int preLollipopOut = a.getInt(R.styleable.CannyViewAnimator_pre_lollipop_out, -1);
         int in = a.getInt(R.styleable.CannyViewAnimator_in, 0);
         int out = a.getInt(R.styleable.CannyViewAnimator_out, 0);
         a.recycle();
-        animateType = type;
+        this.animateType = animateType;
+        this.locationType = locationType;
         boolean preLollipop = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
         setInAnimator(getAnimators((preLollipop && preLollipopIn != -1) ? preLollipopIn : in));
         setOutAnimator(getAnimators((preLollipop && preLollipopOut != -1) ? preLollipopOut : out));
@@ -100,16 +113,34 @@ public class CannyViewAnimator extends TransitionViewAnimator {
     protected void changeVisibility(View inChild, View outChild) {
         if (attachedList.get(outChild) && attachedList.get(inChild)) {
             AnimatorSet animatorSet = new AnimatorSet();
-            if (animateType == SEQUENTIALLY) {
-                animatorSet.playSequentially(
-                        mergeOutAnimators(inChild, outChild),
-                        mergeInAnimators(inChild, outChild)
-                );
-            } else if (animateType == TOGETHER) {
-                animatorSet.playTogether(
-                        mergeOutAnimators(inChild, outChild),
-                        mergeInAnimators(inChild, outChild)
-                );
+            Animator inAnimator = mergeInAnimators(inChild, outChild);
+            Animator outAnimator = mergeOutAnimators(inChild, outChild);
+            prepareTransition(inChild, outChild);
+
+            switch (animateType) {
+                case SEQUENTIALLY:
+                    animatorSet.playSequentially(outAnimator, inAnimator);
+                    break;
+                case TOGETHER:
+                    animatorSet.playTogether(outAnimator, inAnimator);
+                    break;
+            }
+
+            switch (locationType) {
+                case FOR_POSITION:
+                    addOnStartVisibleListener(inAnimator, inChild);
+                    addOnEndInvisibleListener(outAnimator, outChild);
+                    break;
+                case IN_ALWAYS_TOP:
+                    addOnStartVisibleListener(inAnimator, inChild);
+                    addOnEndInvisibleListener(inAnimator, outChild);
+                    addOnStartToTopOnEndToInitPositionListener(inAnimator, inChild);
+                    break;
+                case OUT_ALWAYS_TOP:
+                    addOnStartVisibleListener(outAnimator, inChild);
+                    addOnEndInvisibleListener(outAnimator, outChild);
+                    addOnStartToTopOnEndToInitPositionListener(outAnimator, outChild);
+                    break;
             }
             animatorSet.start();
         } else {
@@ -129,13 +160,20 @@ public class CannyViewAnimator extends TransitionViewAnimator {
             }
         }
         animatorSet.playTogether(animators);
-        animatorSet.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                prepareTransition(inChild, outChild);
-                inChild.setVisibility(VISIBLE);
-            }
-        });
+//        animatorSet.addListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//                prepareTransition(inChild, outChild);
+//                inChild.setVisibility(VISIBLE);
+//                int childCount = getChildCount();
+//                bringChildToPosition(inChild, childCount - 1);
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                bringChildToPosition(inChild, getDisplayedChildIndex());
+//            }
+//        });
         return animatorSet;
     }
 
@@ -150,18 +188,18 @@ public class CannyViewAnimator extends TransitionViewAnimator {
             }
         }
         animatorSet.playTogether(animators);
-        animatorSet.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                prepareTransition(inChild, outChild);
-                outChild.setVisibility(INVISIBLE);
-            }
-        });
-        addRestoreListener(animatorSet);
+//        animatorSet.addListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                prepareTransition(inChild, outChild);
+//                outChild.setVisibility(INVISIBLE);
+//            }
+//        });
+        addRestoreInitValuesListener(animatorSet);
         return animatorSet;
     }
 
-    private void addRestoreListener(AnimatorSet animatorSet) {
+    private void addRestoreInitValuesListener(AnimatorSet animatorSet) {
         for (Animator animator : animatorSet.getChildAnimations()) {
             if (animator instanceof ValueAnimator) {
                 animator.addListener(new AnimatorListenerAdapter() {
@@ -176,12 +214,55 @@ public class CannyViewAnimator extends TransitionViewAnimator {
         }
     }
 
+    private void addOnStartVisibleListener(Animator animator, final View view) {
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                startTransition();
+                view.setVisibility(VISIBLE);
+            }
+        });
+    }
+
+    private void addOnEndInvisibleListener(Animator animator, final View view) {
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                startTransition();
+                view.setVisibility(INVISIBLE);
+            }
+        });
+    }
+
+    private void addOnStartToTopOnEndToInitPositionListener(Animator animator, final View view) {
+        final int initLocation = indexOfChild(view);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                bringChildToPosition(view, getChildCount() - 1);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                bringChildToPosition(view, initLocation);
+            }
+        });
+    }
+
     public int getAnimateType() {
         return animateType;
     }
 
     public void setAnimateType(@AnimateType int animateType) {
         this.animateType = animateType;
+    }
+
+    public int getLocationType() {
+        return locationType;
+    }
+
+    public void setLocationType(@LocationType int locationType) {
+        this.locationType = locationType;
     }
 
     @Override

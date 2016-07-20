@@ -13,11 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:in="alpha|circular_center"
-        app:out="alpha|circular_center"
-        app:pre_lollipop_in="scale_x|scale_y|alpha"
+        app:out="circular_center"
         app:pre_lollipop_out="scale_x|scale_y|alpha"
-        app:type="sequentially">
+        app:animate_type="together"
+        app:location_type="out_always_top">
 
         <android.support.v7.widget.AppCompatTextView
             style="@style/CannyExampleView.FirstView"/>

@@ -1,0 +1,34 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".xml.XmlActivity">
+
+    <com.livetyping.library.CannyViewAnimator
+        android:id="@+id/xml_animator"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:animate_type="together"
+        app:location_type="out_always_top"
+        app:out="circular_center"
+        app:pre_lollipop_out="scale_x|scale_y|alpha">
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/CannyExampleView.FirstView"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/CannyExampleView.SecondView"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/CannyExampleView.ThirdView"/>
+    </com.livetyping.library.CannyViewAnimator>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/xml_start_button"
+        style="@style/Widget.AppCompat.Button.Colored.StartButton"/>
+
+</LinearLayout>

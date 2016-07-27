@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.livetyping.cannyviewanimator.transition.TransitionActivity">
+
+    <com.livetyping.library.CannyViewAnimator
+        android:id="@+id/transition_animator"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/white">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_gravity="center_horizontal|top"
+            app:srcCompat="@drawable/ic_big_logo"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_big_logo"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_gravity="center_horizontal|bottom"
+            app:srcCompat="@drawable/ic_big_logo"/>
+    </com.livetyping.library.CannyViewAnimator>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/transition_start_button"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:text="START!"/>
+
+</LinearLayout>

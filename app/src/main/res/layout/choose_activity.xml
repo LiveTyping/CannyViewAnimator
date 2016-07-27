@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".choose.ChooseActivity">
+
+    <com.livetyping.library.CannyViewAnimator
+        android:id="@+id/choose_animator"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/CannyExampleView.FirstView"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/CannyExampleView.SecondView"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/CannyExampleView.ThirdView"/>
+    </com.livetyping.library.CannyViewAnimator>
+
+    <RadioGroup
+        android:id="@+id/choose_location_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/choose_location_for_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="For position"/>
+
+        <RadioButton
+            android:id="@+id/choose_location_in_always_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="In always top"/>
+
+        <RadioButton
+            android:id="@+id/choose_location_out_always_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Out always top"/>
+    </RadioGroup>
+
+    <FrameLayout
+        android:id="@+id/choose_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:text="Sequentially"/>
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/choose_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:clickable="false"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:text="Together"/>
+    </FrameLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/choose_in_button"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select in animator"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/choose_out_button"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select out animator"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/choose_start_button"
+        style="@style/Widget.AppCompat.Button.Colored.StartButton"/>
+</android.support.v7.widget.LinearLayoutCompat>

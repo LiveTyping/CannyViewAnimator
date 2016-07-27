@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CannyViewAnimator">
+        <attr name="animate_type">
+            <enum name="sequentially" value="1"/>
+            <enum name="together" value="2"/>
+        </attr>
+        <attr name="location_type">
+            <enum name="for_position" value="1"/>
+            <enum name="in_always_top" value="2"/>
+            <enum name="out_always_top" value="3"/>
+        </attr>
+        <attr name="pre_lollipop_in">
+            <flag name="empty" value="1"/>
+            <flag name="alpha" value="2"/>
+            <flag name="alpha_half" value="4"/>
+            <flag name="scale_x" value="8"/>
+            <flag name="scale_x_half" value="16"/>
+            <flag name="scale_y" value="32"/>
+            <flag name="scale_y_half" value="64"/>
+            <flag name="rotation_90" value="128"/>
+            <flag name="rotation_180" value="256"/>
+            <flag name="rotation_360" value="512"/>
+            <flag name="rotation_m90" value="1024"/>
+            <flag name="rotation_m180" value="2048"/>
+            <flag name="rotation_m360" value="4096"/>
+            <flag name="rotation_x_90" value="8192"/>
+            <flag name="rotation_x_360" value="16384"/>
+            <flag name="rotation_x_m90" value="32768"/>
+            <flag name="rotation_x_m360" value="65536"/>
+            <flag name="rotation_y_90" value="131072"/>
+            <flag name="rotation_y_360" value="262144"/>
+            <flag name="rotation_y_m90" value="524288"/>
+            <flag name="rotation_y_m360" value="1048576"/>
+            
+        </attr>
+        <attr name="pre_lollipop_out">
+            <flag name="empty" value="1"/>
+            <flag name="alpha" value="2"/>
+            <flag name="alpha_half" value="4"/>
+            <flag name="scale_x" value="8"/>
+            <flag name="scale_x_half" value="16"/>
+            <flag name="scale_y" value="32"/>
+            <flag name="scale_y_half" value="64"/>
+            <flag name="rotation_90" value="128"/>
+            <flag name="rotation_180" value="256"/>
+            <flag name="rotation_360" value="512"/>
+            <flag name="rotation_m90" value="1024"/>
+            <flag name="rotation_m180" value="2048"/>
+            <flag name="rotation_m360" value="4096"/>
+            <flag name="rotation_x_90" value="8192"/>
+            <flag name="rotation_x_360" value="16384"/>
+            <flag name="rotation_x_m90" value="32768"/>
+            <flag name="rotation_x_m360" value="65536"/>
+            <flag name="rotation_y_90" value="131072"/>
+            <flag name="rotation_y_360" value="262144"/>
+            <flag name="rotation_y_m90" value="524288"/>
+            <flag name="rotation_y_m360" value="1048576"/>
+        </attr>
+        <attr name="in">
+            <flag name="empty" value="1"/>
+            <flag name="alpha" value="2"/>
+            <flag name="alpha_half" value="4"/>
+            <flag name="scale_x" value="8"/>
+            <flag name="scale_x_half" value="16"/>
+            <flag name="scale_y" value="32"/>
+            <flag name="scale_y_half" value="64"/>
+            <flag name="rotation_90" value="128"/>
+            <flag name="rotation_180" value="256"/>
+            <flag name="rotation_360" value="512"/>
+            <flag name="rotation_m90" value="1024"/>
+            <flag name="rotation_m180" value="2048"/>
+            <flag name="rotation_m360" value="4096"/>
+            <flag name="rotation_x_90" value="8192"/>
+            <flag name="rotation_x_360" value="16384"/>
+            <flag name="rotation_x_m90" value="32768"/>
+            <flag name="rotation_x_m360" value="65536"/>
+            <flag name="rotation_y_90" value="131072"/>
+            <flag name="rotation_y_360" value="262144"/>
+            <flag name="rotation_y_m90" value="524288"/>
+            <flag name="rotation_y_m360" value="1048576"/>
+            <flag name="circular_top_center" value="2097152"/>
+            <flag name="circular_top_left" value="4194304"/>
+            <flag name="circular_top_right" value="8388608"/>
+            <flag name="circular_bottom_center" value="16777216"/>
+            <flag name="circular_bottom_left" value="33554432"/>
+            <flag name="circular_bottom_right" value="67108864"/>
+            <flag name="circular_center_left" value="134217728"/>
+            <flag name="circular_center_right" value="268435456"/>
+            <flag name="circular_center" value="536870912"/>
+        </attr>
+        <attr name="out">
+            <flag name="empty" value="1"/>
+            <flag name="alpha" value="2"/>
+            <flag name="alpha_half" value="4"/>
+            <flag name="scale_x" value="8"/>
+            <flag name="scale_x_half" value="16"/>
+            <flag name="scale_y" value="32"/>
+            <flag name="scale_y_half" value="64"/>
+            <flag name="rotation_90" value="128"/>
+            <flag name="rotation_180" value="256"/>
+            <flag name="rotation_360" value="512"/>
+            <flag name="rotation_m90" value="1024"/>
+            <flag name="rotation_m180" value="2048"/>
+            <flag name="rotation_m360" value="4096"/>
+            <flag name="rotation_x_90" value="8192"/>
+            <flag name="rotation_x_360" value="16384"/>
+            <flag name="rotation_x_m90" value="32768"/>
+            <flag name="rotation_x_m360" value="65536"/>
+            <flag name="rotation_y_90" value="131072"/>
+            <flag name="rotation_y_360" value="262144"/>
+            <flag name="rotation_y_m90" value="524288"/>
+            <flag name="rotation_y_m360" value="1048576"/>
+            <flag name="circular_top_center" value="2097152"/>
+            <flag name="circular_top_left" value="4194304"/>
+            <flag name="circular_top_right" value="8388608"/>
+            <flag name="circular_bottom_center" value="16777216"/>
+            <flag name="circular_bottom_left" value="33554432"/>
+            <flag name="circular_bottom_right" value="67108864"/>
+            <flag name="circular_center_left" value="134217728"/>
+            <flag name="circular_center_right" value="268435456"/>
+            <flag name="circular_center" value="536870912"/>
+        </attr>
+    </declare-styleable>
+</resources>

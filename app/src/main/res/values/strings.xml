@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">CannyViewAnimator</string>
+    <string name="main_custom_example">Custom example</string>
+    <string name="main_xml_example">Xml example</string>
+    <string name="main_transition_example">Transition example</string>
+    <string name="main_choose_your_animation">Choose your animation!</string>
+    <string name="app_first_view">First view</string>
+    <string name="app_second_view">Second view</string>
+    <string name="app_third_view">Third view</string>
+    <string name="app_start">START!</string>
 </resources>

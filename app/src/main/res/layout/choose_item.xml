@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/choose_item_container"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:layout_margin="4dp"
+    android:foreground="?selectableItemBackground"
+    android:orientation="vertical"
+    app:cardUseCompatPadding="true">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/choose_item_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/choose_item_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|right"
+        app:srcCompat="@drawable/ic_check"/>
+</android.support.v7.widget.CardView>

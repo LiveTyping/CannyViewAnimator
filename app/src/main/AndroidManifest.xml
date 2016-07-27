@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="ru.ltst.cannyviewanimator">
+          package="com.livetyping.cannyviewanimator">
 
     <application
         android:allowBackup="true"
@@ -15,6 +15,13 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".choose.ChooseActivity"/>
+        <activity
+            android:name=".choose.list.ChooseListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".xml.XmlActivity"/>
+        <activity android:name=".transition.TransitionActivity"/>
+        <activity android:name=".custom.CustomActivity"/>
     </application>
 
 </manifest>

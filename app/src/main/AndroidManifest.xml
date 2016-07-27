@@ -20,8 +20,8 @@
             android:name=".choose.list.ChooseListActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".xml.XmlActivity"/>
-        <activity android:name=".transition.TransitionActivity">
-        </activity>
+        <activity android:name=".transition.TransitionActivity"/>
+        <activity android:name=".custom.CustomActivity"/>
     </application>
 
 </manifest>

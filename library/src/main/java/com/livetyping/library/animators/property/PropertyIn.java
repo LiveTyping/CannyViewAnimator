@@ -21,6 +21,11 @@ public class PropertyIn extends PropertyCanny implements InAnimator {
         super(propertyName, start, end);
     }
 
+    public PropertyIn setDuration(long millis) {
+        propertyAnimator.setDuration(millis);
+        return this;
+    }
+
     @Override
     public Animator getInAnimator(View inChild, View outChild) {
         return getPropertyAnimator(inChild);

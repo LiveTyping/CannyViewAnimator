@@ -63,10 +63,10 @@ public class ChooseListActivity extends AppCompatActivity implements ChooseItemV
         adapter = new SimpleBindableAdapter<>(R.layout.choose_item, ChooseItemViewHolder.class);
         adapter.setActionListener(this);
         List<DefaultCannyAnimators> items = new ArrayList<>();
-        items.addAll(Arrays.asList(PropertyAnimators.values()));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             items.addAll(Arrays.asList(RevealAnimators.values()));
         }
+        items.addAll(Arrays.asList(PropertyAnimators.values()));
         adapter.addAll(ChooseModel.getAnimators(items));
         return adapter;
     }

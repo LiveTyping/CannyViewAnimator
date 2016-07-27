@@ -21,6 +21,11 @@ public class PropertyOut extends PropertyCanny implements OutAnimator {
         super(propertyName, start, end);
     }
 
+    public PropertyOut setDuration(long millis) {
+        propertyAnimator.setDuration(millis);
+        return this;
+    }
+
     @Override
     public Animator getOutAnimator(View inChild, View outChild) {
         return getPropertyAnimator(outChild);

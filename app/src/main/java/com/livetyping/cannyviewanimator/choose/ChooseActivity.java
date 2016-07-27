@@ -110,9 +110,9 @@ public class ChooseActivity extends AppCompatActivity {
         List<DefaultCannyAnimators> animators = new ArrayList<>(positionsAnimators.size());
         String text = "";
         for (Integer position : positionsAnimators) {
-            DefaultCannyAnimators newAnimator = position < PropertyAnimators.values().length
-                    ? PropertyAnimators.values()[position]
-                    : RevealAnimators.values()[position - PropertyAnimators.values().length];
+            DefaultCannyAnimators newAnimator = position < RevealAnimators.values().length
+                    ? RevealAnimators.values()[position]
+                    : PropertyAnimators.values()[position - RevealAnimators.values().length];
             animators.add(newAnimator);
             text += getNormalName(newAnimator.getName()) + " ";
         }

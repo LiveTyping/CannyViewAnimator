@@ -6,10 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.livetyping.cannyviewanimator.choose.ChooseActivity;
+import com.livetyping.cannyviewanimator.custom.CustomActivity;
 import com.livetyping.cannyviewanimator.transition.TransitionActivity;
 import com.livetyping.cannyviewanimator.xml.XmlActivity;
 
 public class MainActivity extends AppCompatActivity {
+    private View startCustom;
     private View startXml;
     private View startTransition;
     private View startChoose;
@@ -23,12 +25,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void findViews() {
+        startCustom = findViewById(R.id.main_activity_start_custom);
         startXml = findViewById(R.id.main_activity_start_xml);
         startTransition = findViewById(R.id.main_activity_start_transition);
         startChoose = findViewById(R.id.main_activity_start_choose);
     }
 
     private void initViews() {
+        startCustom.setOnClickListener(getStartActivityCL(CustomActivity.class));
         startXml.setOnClickListener(getStartActivityCL(XmlActivity.class));
         startTransition.setOnClickListener(getStartActivityCL(TransitionActivity.class));
         startChoose.setOnClickListener(getStartActivityCL(ChooseActivity.class));

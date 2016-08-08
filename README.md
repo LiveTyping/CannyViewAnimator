@@ -17,7 +17,7 @@ CannyViewAnimator divided into three layers of abstraction:
 ## ViewAnimator
 Includes the following public methods:
 * setDisplayedChildIndex (int inChildIndex) - shows the child by its index in the parent
-* setDisplayedChildId (@IdRes int id) - shows the child in his resID
+* setDisplayedChildId (@IdRes int id) - shows the child in its resID
 * setDisplayedChild (View view) - shows a child on the project
 * getDisplayedChildIndex () - obtain the index of the currently displayed child
 * getDisplayedChild () - obtain the object currently displayed child
@@ -83,6 +83,12 @@ It is divided into two types:
   * PropertyAnimators - animators of View property. [List] (library / src / main / java / com / livetyping / library / animators / property / PropertyAnimators.java)
   * RevealAnimators - CircularReveal animators. [List] (library / src / main / java / com / livetyping / library / animators / reveal / RevealAnimators.java)
 
+Example:
+```java
+ animator.setInAnimator(PropertyAnimators.ROTATION_180);
+ animator.setInAnimator(PropertyAnimators.ROTATION_M180);
+```
+
 ## Helper classes
 This group of classes needed for a simple creation InAnimators and OutAnimators.
  * PropertyIn
@@ -108,6 +114,18 @@ Attribute list:
 
 if the current version of the Android is lower than Lolipop, then animators will given from `prelolipop_in`, if `prelolipop_in`  is empty, then animators will given from `in`.
 
+Example:
+```xml
+<com.livetyping.library.CannyViewAnimator
+        android:id="@+id/xml_animator"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:animate_type="together"
+        app:location_type="out_always_top"
+        app:out="circular_center"
+        app:pre_lollipop_out="scale_x|scale_y|alpha">
+```
 ## License
 Copyright 2015 Danil Perevalov.
 

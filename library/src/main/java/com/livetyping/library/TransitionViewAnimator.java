@@ -2,8 +2,8 @@ package com.livetyping.library;
 
 import android.content.Context;
 import android.os.Build;
-import android.transition.Transition;
-import android.transition.TransitionManager;
+import android.support.transition.Transition;
+import android.support.transition.TransitionManager;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -32,13 +32,13 @@ public class TransitionViewAnimator extends ViewAnimator {
     }
 
     protected void prepareTransition(View inChild, View outChild) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && cannyTransition != null) {
+        if (cannyTransition != null) {
             transition = cannyTransition.getTransition(inChild, outChild);
         }
     }
 
     public void startTransition() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && transition != null) {
+        if (transition != null) {
             TransitionManager.beginDelayedTransition(this, transition);
         }
     }

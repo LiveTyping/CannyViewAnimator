@@ -1,24 +1,16 @@
 package com.livetyping.cannyviewanimator.transition;
 
-import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatImageView;
-import android.transition.ChangeBounds;
-import android.transition.Explode;
-import android.transition.Fade;
-import android.transition.Slide;
-import android.transition.Transition;
-import android.transition.TransitionSet;
-import android.view.Gravity;
+import android.support.transition.Fade;
+import android.support.transition.Transition;
+import android.support.transition.TransitionSet;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
 import com.livetyping.cannyviewanimator.R;
 import com.livetyping.library.CannyViewAnimator;
-import com.livetyping.library.TransitionViewAnimator;
 import com.livetyping.library.animators.property.PropertyAnimators;
-import com.livetyping.library.animators.property.PropertyIn;
 import com.livetyping.library.interfaces.CannyTransition;
 
 public class TransitionActivity extends AppCompatActivity {
@@ -43,7 +35,7 @@ public class TransitionActivity extends AppCompatActivity {
             @Override
             public Transition getTransition(View inChild, View outChild) {
                 TransitionSet transitionSet = new TransitionSet();
-                transitionSet.addTransition(new Explode().addTarget(inChild));
+                transitionSet.addTransition(new Fade(Fade.IN).addTarget(inChild));
                 transitionSet.addTransition(new Fade(Fade.OUT).addTarget(outChild));
                 return transitionSet;
             }

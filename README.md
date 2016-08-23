@@ -1,33 +1,32 @@
 # CannyViewAnimator
-CannyViewAnimator an enhanced version ViewAnimator.
-It allows the use of Animators and Trasitions extend Visibility.
-The logic is taken from ViewAnimator of the Android SDK. ViewAnimator allows
-be visible only to one child at a time. When you set the visible another child
-previous visible child to become invisible. Switching occurs with animation.
+CannyViewAnimator is an enhanced version of ViewAnimator. It allows to use  Animators and
+Transitions to extend Visibility. The logic is taken from ViewAnimator of the Android SDK.
+ViewAnimator allows only one child to be visible at a time. Setting another child to be visible
+causes the previous child to become invisible. This switching occurs with animation.
 
 ## Internal organization
-CannyViewAnimator divided into three layers of abstraction:
-* ViewAnimator - switches Visibility Views container
-* TransitionViewAnimator (extends ViewAnimator) - performs Transition extend Visibility
-* CannyViewAnimator (extands TransitionViewAnimator) - performs Animators
-* CannyTransition - interface to set Transition for individual children
-* InAnimator - interface to set animator for appearing
-* OutAnimator - interface to set animator for disappearing
+CannyViewAnimator is divided into three layers of abstraction:
+* ViewAnimator - switches the visibility of child;
+* TransitionViewAnimator (extends ViewAnimator) - performs Transitions that extend Visibility;
+* CannyViewAnimator (extends TransitionViewAnimator) - performs Animators;
+* CannyTransition - interface for setting Transition for individual children;
+* InAnimator - interface for setting animator for appearing;
+* OutAnimator - interface for setting animator for disappearing.
 
 ## ViewAnimator
 Includes the following public methods:
-* setDisplayedChildIndex (int inChildIndex) - shows the child by its index in the parent
-* setDisplayedChildId (@IdRes int id) - shows the child in its resID
-* setDisplayedChild (View view) - shows a child on the project
-* getDisplayedChildIndex () - obtain the index of the currently displayed child
-* getDisplayedChild () - obtain the object currently displayed child
-* getDisplayedChildId () - getting resID currently displayed child
-* bringChildToPosition (View child, int position) - the change of the index of the child within the parent
+* setDisplayedChildIndex (int inChildIndex) - shows a child by its index in the parent;
+* setDisplayedChildId (@IdRes int id) - shows a child by its resID;
+* setDisplayedChild (View view) - shows a child by its object;
+* getDisplayedChildIndex () - obtains the index of the currently displayed child;
+* getDisplayedChild () - obtains the object of the currently displayed child;
+* getDisplayedChildId () – gets the resID of the currently displayed child;
+* bringChildToPosition (View child, int position) – changes the index of a child within the parent.
 
 ## TransitionViewAnimator
 Includes the following public methods:
-* startTransition () - launches Transition (default start after change visibility)
-* setCannyTransition (CannyTransition cannyTransition) - set the interface to set Transition for individual children
+* startTransition() - launches Transition (starts by default after visibility changes)
+* setCannyTransition (CannyTransition cannyTransition) – interface setter for setting Transition for individual children
 ```java
 animator.setCannyTransition(new CannyTransition() {
             @Override
@@ -41,10 +40,10 @@ animator.setCannyTransition(new CannyTransition() {
 ```
 ## CannyViewAnimator
 Includes the following public methods:
-* setInAnimator (T ... inAnimators) - set of interfaces for the emergence through the parameters
-* setInAnimator (List inAnimators <extends InAnimator?>) - set of interfaces for the emergence through the list
-* setOutAnimator (T ... outAnimators) - set of interfaces for extinction by the parameters
-* setOutAnimator (List outAnimators <extends OutAnimator?>) - set of interfaces to extinction through the list
+* setInAnimator (T ... inAnimators) – interface setter for fading in animation (using the parameters)
+* setInAnimator (List<? extends inAnimators) – interface setter for fading in animation (using the list)
+* setOutAnimator (T ... outAnimators) – interface setter for fading out animation (using the parameters)
+* setOutAnimator (List<? extends OutAnimator>outAnimators) – interface setter for fading out animation (using the list)
 
 
 ```java
@@ -64,23 +63,24 @@ Includes the following public methods:
 
 
 ## Flags
-AnimateType - It indicates the order in which the animation will run.
- - Sequentaly
+AnimateType - indicates the order in which the animation will run.
+ - Sequentially
  - Together
 
 `animator.setAnimateType(CannyViewAnimator.TOGETHER);`
 
-LocationType - It indicates what order will have children for the duration of the animation. It is necessary that the child does not overlap with another child.
+LocationType - indicates the order in which the children will be placed in the parent.
+This flag makes sure that children don’t overlap with each other during animation.
  - For position
  - In always top
  - Out always top
 
 `animator.setLocationType(CannyViewAnimator.IN_ALWAYS_TOP);`
 
-## DeafultCannyAnimators
-This class group originally created for testing. But in the end I decided to leave them, because they help to make simple animations effortlessly.
-It is divided into two types:
-  * PropertyAnimators - animators of View property. [List] (library / src / main / java / com / livetyping / library / animators / property / PropertyAnimators.java)
+## DefaultCannyAnimators
+This class group was originally created for testing, but in the end I decided to leave them because
+they help to make simple animations effortlessly. It is divided into two types:
+  * PropertyAnimators - animators of View properties. [List] (library / src / main / java / com / livetyping / library / animators / property / PropertyAnimators.java)
   * RevealAnimators - CircularReveal animators. [List] (library / src / main / java / com / livetyping / library / animators / reveal / RevealAnimators.java)
 
 Example:
@@ -90,7 +90,7 @@ Example:
 ```
 
 ## Helper classes
-This group of classes needed for a simple creation InAnimators and OutAnimators.
+This group of classes is needed for easier creation of InAnimators and OutAnimators.
  * PropertyIn
  * PropertyOut
  * RevealIn
@@ -112,7 +112,8 @@ Attribute list:
  * `prelolipop_in` set default in animator (without reveal animators)
  * `prelolipop_out` set default out animator (without reveal animators)
 
-if the current version of the Android is lower than Lolipop, then animators will given from `prelolipop_in`, if `prelolipop_in`  is empty, then animators will given from `in`.
+If the current Android version is lower than Lollipop, then animators will be taken from
+`prelolipop_in`, if `prelolipop_in` is empty, then animators will taken from `in`.
 
 Example:
 ```xml

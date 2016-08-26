@@ -5,6 +5,7 @@ ViewAnimator allows only one child to be visible at a time. Setting another chil
 causes the previous child to become invisible. This switching occurs with animation.
 
 ![Parallax example](readme_extra/parallax.gif?raw=true "Parallax example")
+![Your animation example](readme_extra/your_animation.gif?raw=true "Your animation example")
 
 ## Internal organization
 CannyViewAnimator is divided into three layers of abstraction:
@@ -26,20 +27,26 @@ Includes the following public methods:
 * bringChildToPosition (View child, int position) – changes the index of a child within the parent.
 
 ## TransitionViewAnimator
+(Use Transitions from AppCompat)
 Includes the following public methods:
 * startTransition() - launches Transition (starts by default after visibility changes)
 * setCannyTransition (CannyTransition cannyTransition) – interface setter for setting Transition for individual children
+
+![Transition example](readme_extra/transition.gif?raw=true "Transition example")
+
 ```java
 animator.setCannyTransition(new CannyTransition() {
             @Override
             public Transition getTransition(View inChild, View outChild) {
                 TransitionSet transitionSet = new TransitionSet();
-                transitionSet.addTransition(new Explode().addTarget(inChild));
+                transitionSet.addTransition(new Fade(Fade.IN).addTarget(inChild));
                 transitionSet.addTransition(new Fade(Fade.OUT).addTarget(outChild));
                 return transitionSet;
             }
         });
 ```
+
+
 ## CannyViewAnimator
 Includes the following public methods:
 * setInAnimator (T ... inAnimators) – interface setter for fading in animation (using the parameters)
@@ -118,6 +125,8 @@ If the current Android version is lower than Lollipop, then animators will be ta
 `prelolipop_in`, if `prelolipop_in` is empty, then animators will taken from `in`.
 
 Example:
+![XML example](readme_extra/xml.gif?raw=true "XML example")
+
 ```xml
 <com.livetyping.library.CannyViewAnimator
         android:id="@+id/xml_animator"

@@ -5,7 +5,6 @@ ViewAnimator allows only one child to be visible at a time. Setting another chil
 causes the previous child to become invisible. This switching occurs with animation.
 
 ![Parallax example](readme_extra/parallax.gif?raw=true "Parallax example")
-![Your animation example](readme_extra/your_animation.gif?raw=true "Your animation example")
 
 ## Internal organization
 CannyViewAnimator is divided into three layers of abstraction:

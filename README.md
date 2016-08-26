@@ -4,6 +4,8 @@ Transitions to extend Visibility. The logic is taken from ViewAnimator of the An
 ViewAnimator allows only one child to be visible at a time. Setting another child to be visible
 causes the previous child to become invisible. This switching occurs with animation.
 
+![Parallax example](readme_extra/parallax.gif?raw=true "Parallax example")
+
 ## Internal organization
 CannyViewAnimator is divided into three layers of abstraction:
 * ViewAnimator - switches the visibility of child;
@@ -80,8 +82,8 @@ This flag makes sure that children don’t overlap with each other during animat
 ## DefaultCannyAnimators
 This class group was originally created for testing, but in the end I decided to leave them because
 they help to make simple animations effortlessly. It is divided into two types:
-  * PropertyAnimators - animators of View properties. [List] (library / src / main / java / com / livetyping / library / animators / property / PropertyAnimators.java)
-  * RevealAnimators - CircularReveal animators. [List] (library / src / main / java / com / livetyping / library / animators / reveal / RevealAnimators.java)
+  * PropertyAnimators - animators of View properties. [List] (library/src/main/java/com/livetyping/library/animators/property/PropertyAnimators.java)
+  * RevealAnimators - CircularReveal animators. [List] (library/src/main/java/com/livetyping/library/animators/reveal/RevealAnimators.java)
 
 Example:
 ```java

@@ -124,6 +124,7 @@ If the current Android version is lower than Lollipop, then animators will be ta
 `prelolipop_in`, if `prelolipop_in` is empty, then animators will taken from `in`.
 
 Example:
+
 ![XML example](readme_extra/xml.gif?raw=true "XML example")
 
 ```xml

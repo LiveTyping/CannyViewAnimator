@@ -4,8 +4,8 @@ Transitions to extend Visibility. The logic is taken from ViewAnimator of the An
 ViewAnimator allows only one child to be visible at a time. Setting another child to be visible
 causes the previous child to become invisible. This switching occurs with animation.
 
-![Top 1 example](readme_extra/top_1.gif?raw=true "Top 1 example" | width=150 | height=150)
-![Top 2 example](readme_extra/top_2.gif?raw=true "Top 2 example" | width=150 height=150)
+![Top 1 example](readme_extra/top_1.gif?raw=true "Top 1 example" | width = 150px | height = 150px)
+![Top 2 example](readme_extra/top_2.gif?raw=true "Top 2 example" | width = 150px height = 150px)
 ![Top 3 example](readme_extra/top_3.gif?raw=true =250x250 "Top 3 example" )
 
 ## Installation

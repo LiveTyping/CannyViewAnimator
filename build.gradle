@@ -12,6 +12,11 @@ buildscript {
     }
 }
 
+ext {
+    versionName = VERSION_NAME as String
+    versionCode = VERSION_CODE as int
+}
+
 allprojects {
     repositories {
         jcenter()

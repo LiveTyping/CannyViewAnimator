@@ -1,15 +1,18 @@
 apply plugin: 'com.android.library'
 
+String versionNameRoot = rootProject.versionName
+int versionCodeRoot = rootProject.versionCode
+
 android {
     compileSdkVersion 24
-    buildToolsVersion "23.0.3"
+    buildToolsVersion "24.0.1"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+        versionCode versionCodeRoot
+        versionName versionNameRoot
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -19,6 +22,9 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-annotations:+'
-    compile 'com.android.support:transition:+'
+    compile 'com.android.support:support-annotations:24.2.0'
+    compile 'com.android.support:transition:24.2.0'
 }
+
+apply from: '../gradle/deploy.gradle'
+

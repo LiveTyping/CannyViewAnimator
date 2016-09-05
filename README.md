@@ -4,7 +4,12 @@ Transitions to extend Visibility. The logic is taken from ViewAnimator of the An
 ViewAnimator allows only one child to be visible at a time. Setting another child to be visible
 causes the previous child to become invisible. This switching occurs with animation.
 
-![Parallax example](readme_extra/parallax.gif?raw=true "Parallax example")
+![Top 1 example](readme_extra/top_1.gif?raw=true "Top 1 example")
+![Top 2 example](readme_extra/top_2.gif?raw=true "Top 2 example")
+![Top 3 example](readme_extra/top_3.gif?raw=true "Top 3 example")
+
+## Installation
+Add `compile 'com.livetyping:cannyviewanimator:0.8'` in your dependencies.
 
 ## Internal organization
 CannyViewAnimator is divided into three layers of abstraction:
@@ -110,6 +115,9 @@ animator.setInAnimator(new PropertyIn(View.TRANSLATION_X, width, 0).setDuration(
 animator.setOutAnimator(new PropertyOut(View.TRANSLATION_X, 0, -width / 2).setDuration(1000));
 animator.setLocationType(CannyViewAnimator.IN_ALWAYS_TOP);
 animator.setAnimateType(CannyViewAnimator.TOGETHER);
+
+![Parallax example](readme_extra/parallax.gif?raw=true "Parallax example")
+
 ```
 ## XML
 Attribute list:

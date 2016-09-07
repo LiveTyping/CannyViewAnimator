@@ -1,8 +1,11 @@
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-CannyViewAnimator-green
+.svg?style=flat)](https://android-arsenal.com/details/1/4302)
+
 # CannyViewAnimator
 CannyViewAnimator is an enhanced version of ViewAnimator. It allows to use  Animators and
 Transitions to extend Visibility. The logic is taken from ViewAnimator of the Android SDK.
-ViewAnimator allows only one child to be visible at a time. Setting another child to be visible
-causes the previous child to become invisible. This switching occurs with animation.
+The ViewAnimator can show only one view. If you show an other view then previous one will be hidden.
+All changes are taking with animations.
 
 ![Top 1 example](readme_extra/top_1.gif?raw=true "Top 1 example")
 ![Top 2 example](readme_extra/top_2.gif?raw=true "Top 2 example")

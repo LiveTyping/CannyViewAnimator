@@ -118,10 +118,11 @@ animator.setInAnimator(new PropertyIn(View.TRANSLATION_X, width, 0).setDuration(
 animator.setOutAnimator(new PropertyOut(View.TRANSLATION_X, 0, -width / 2).setDuration(1000));
 animator.setLocationType(CannyViewAnimator.IN_ALWAYS_TOP);
 animator.setAnimateType(CannyViewAnimator.TOGETHER);
+```
 
 ![Parallax example](readme_extra/parallax.gif?raw=true "Parallax example")
 
-```
+
 ## XML
 Attribute list:
  * `animate_type` inmplementation `setAnimateType`

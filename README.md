@@ -14,6 +14,9 @@ All changes are taking with animations.
 ## Installation
 Add `compile 'com.livetyping:cannyviewanimator:0.8'` in your dependencies.
 
+![U2020 example](readme_extra/u2020.gif?raw=true "U2020 example")
+
+
 ## Internal organization
 CannyViewAnimator is divided into three layers of abstraction:
 * ViewAnimator - switches the visibility of child;

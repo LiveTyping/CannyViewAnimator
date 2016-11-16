@@ -17,6 +17,7 @@ import com.livetyping.library.animators.reveal.RevealAnimators;
 import com.livetyping.library.interfaces.DefaultCannyAnimators;
 import com.livetyping.library.interfaces.InAnimator;
 import com.livetyping.library.interfaces.OutAnimator;
+import com.livetyping.library.util.ReverseInterpolator;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -186,7 +187,8 @@ public class CannyViewAnimator extends TransitionViewAnimator {
                     public void onAnimationEnd(Animator animation) {
                         animation.removeListener(this);
                         animation.setDuration(0);
-                        ((ValueAnimator) animation).reverse();
+                        animation.setInterpolator(new ReverseInterpolator());
+                        animation.start();
                     }
                 });
             }

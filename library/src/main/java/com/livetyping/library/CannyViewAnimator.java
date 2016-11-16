@@ -181,7 +181,9 @@ public class CannyViewAnimator extends TransitionViewAnimator {
 
     private void addRestoreInitValuesListener(AnimatorSet animatorSet) {
         for (Animator animator : animatorSet.getChildAnimations()) {
-            if (animator instanceof ValueAnimator) {
+            if (animator instanceof AnimatorSet) {
+                addRestoreInitValuesListener((AnimatorSet) animator);
+            } else if (animator instanceof ValueAnimator) {
                 animator.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {

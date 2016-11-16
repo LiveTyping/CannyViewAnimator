@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.danil.recyclerbindableadapter.library.RecyclerBindableAdapter;
 import com.danil.recyclerbindableadapter.library.SimpleBindableAdapter;
 import com.livetyping.cannyviewanimator.R;
 import com.livetyping.cannyviewanimator.RequestResultCodes;

@@ -1,6 +1,7 @@
 package com.livetyping.cannyviewanimator.choose;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
@@ -110,6 +111,9 @@ public class ChooseActivity extends AppCompatActivity {
         List<DefaultCannyAnimators> animators = new ArrayList<>(positionsAnimators.size());
         String text = "";
         for (Integer position : positionsAnimators) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                position = position + RevealAnimators.values().length;
+            }
             DefaultCannyAnimators newAnimator = position < RevealAnimators.values().length
                     ? RevealAnimators.values()[position]
                     : PropertyAnimators.values()[position - RevealAnimators.values().length];

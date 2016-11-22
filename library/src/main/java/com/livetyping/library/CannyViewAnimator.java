@@ -23,6 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,10 +50,12 @@ public class CannyViewAnimator extends TransitionViewAnimator {
     @interface LocationType {
     }
 
+
     private List<? extends InAnimator> inAnimator;
     private List<? extends OutAnimator> outAnimator;
     private final Map<View, Boolean> attachedList = new HashMap<>(getChildCount());
-
+    private final Map<View, List<Animator>> playedList = new HashMap<>();
+    private boolean isImmediateRemove = false;
 
     public CannyViewAnimator(Context context) {
         super(context);
@@ -157,6 +160,7 @@ public class CannyViewAnimator extends TransitionViewAnimator {
                 Animator animator = inAnimator.getInAnimator(inChild, outChild);
                 if (animator != null) {
                     animators.add(animator);
+                    addPlayedListener(inChild, outChild, animator);
                 }
             }
         }
@@ -170,13 +174,33 @@ public class CannyViewAnimator extends TransitionViewAnimator {
         for (OutAnimator outAnimator : this.outAnimator) {
             if (outAnimator != null) {
                 Animator animator = outAnimator.getOutAnimator(inChild, outChild);
-                if (animator != null)
+                if (animator != null) {
                     animators.add(animator);
+                    addPlayedListener(inChild, outChild, animator);
+                }
             }
         }
         animatorSet.playTogether(animators);
         addRestoreInitValuesListener(animatorSet);
         return animatorSet;
+    }
+
+    private void addPlayedListener(final View inChild, final View outChild, Animator animator) {
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                playedList.get(inChild).add(animation);
+                playedList.get(outChild).add(animation);
+            }
+
+            @Override
+            public void onAnimationEnd(final Animator animation) {
+                if (!isImmediateRemove) {
+                    playedList.get(inChild).remove(animation);
+                    playedList.get(outChild).remove(animation);
+                }
+            }
+        });
     }
 
     private void addRestoreInitValuesListener(AnimatorSet animatorSet) {
@@ -251,6 +275,8 @@ public class CannyViewAnimator extends TransitionViewAnimator {
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
         attachedList.put(child, false);
+
+        playedList.put(child, Collections.synchronizedList(new ArrayList<Animator>()));
         child.addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
@@ -258,11 +284,29 @@ public class CannyViewAnimator extends TransitionViewAnimator {
             }
 
             @Override
-            public void onViewDetachedFromWindow(View v) {
-                attachedList.put(v, false);
+            public void onViewDetachedFromWindow(View view) {
+                attachedList.put(view, false);
+                cancelAnimatorsForView(view);
             }
         });
         super.addView(child, index, params);
+    }
+
+    public void cancelAnimatorsForView(View view){
+        isImmediateRemove = true;
+        for (Animator animator : playedList.get(view)) {
+            animator.cancel();
+        }
+        playedList.get(view).clear();
+        isImmediateRemove = false;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        for (View key : playedList.keySet()) {
+           cancelAnimatorsForView(key);
+        }
+        super.onDetachedFromWindow();
     }
 
     @Override

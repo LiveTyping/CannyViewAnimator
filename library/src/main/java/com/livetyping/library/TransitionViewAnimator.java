@@ -1,7 +1,6 @@
 package com.livetyping.library;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.transition.Transition;
 import android.support.transition.TransitionManager;
 import android.util.AttributeSet;
@@ -25,10 +24,12 @@ public class TransitionViewAnimator extends ViewAnimator {
     }
 
     @Override
-    protected void changeVisibility(View inChild, View outChild) {
-        prepareTransition(inChild, outChild);
-        startTransition();
-        super.changeVisibility(inChild, outChild);
+    protected void changeVisibility(View inChild, View outChild, boolean withAnim) {
+        if (withAnim) {
+            prepareTransition(inChild, outChild);
+            startTransition();
+        }
+        super.changeVisibility(inChild, outChild, withAnim);
     }
 
     protected void prepareTransition(View inChild, View outChild) {

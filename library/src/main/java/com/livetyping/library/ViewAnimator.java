@@ -25,7 +25,7 @@ public class ViewAnimator extends FrameLayout {
         super(context, attrs);
     }
 
-    public void setDisplayedChildIndex(int inChildIndex) {
+    public void setDisplayedChildIndex(int inChildIndex, boolean withAnim) {
         if (inChildIndex >= getChildCount()) {
             inChildIndex = 0;
         } else if (inChildIndex < 0) {
@@ -34,19 +34,23 @@ public class ViewAnimator extends FrameLayout {
         boolean hasFocus = getFocusedChild() != null;
         int outChildIndex = lastWhichIndex;
         lastWhichIndex = inChildIndex;
-        changeVisibility(getChildAt(inChildIndex), getChildAt(outChildIndex));
+        changeVisibility(getChildAt(inChildIndex), getChildAt(outChildIndex), withAnim);
         if (hasFocus) {
             requestFocus(FOCUS_FORWARD);
         }
     }
 
     public void setDisplayedChildId(@IdRes int id) {
+        setDisplayedChildId(id, true);
+    }
+
+    public void setDisplayedChildId(@IdRes int id, boolean withAnim) {
         if (getDisplayedChildId() == id) {
             return;
         }
         for (int i = 0, count = getChildCount(); i < count; i++) {
             if (getChildAt(i).getId() == id) {
-                setDisplayedChildIndex(i);
+                setDisplayedChildIndex(i, withAnim);
                 return;
             }
         }
@@ -55,6 +59,10 @@ public class ViewAnimator extends FrameLayout {
 
     public void setDisplayedChild(View view) {
         setDisplayedChildId(view.getId());
+    }
+
+    public void setDisplayedChild(View view, boolean withAnim) {
+        setDisplayedChildId(view.getId(), withAnim);
     }
 
     public int getDisplayedChildIndex() {
@@ -69,7 +77,7 @@ public class ViewAnimator extends FrameLayout {
         return getDisplayedChild().getId();
     }
 
-    protected void changeVisibility(View inChild, View outChild) {
+    protected void changeVisibility(View inChild, View outChild, boolean withAnim) {
         outChild.setVisibility(INVISIBLE);
         inChild.setVisibility(VISIBLE);
     }
@@ -83,7 +91,7 @@ public class ViewAnimator extends FrameLayout {
             child.setVisibility(View.INVISIBLE);
         }
         if (index >= 0 && lastWhichIndex >= index) {
-            setDisplayedChildIndex(lastWhichIndex + 1);
+            setDisplayedChildIndex(lastWhichIndex + 1, false);
         }
     }
 
@@ -108,9 +116,9 @@ public class ViewAnimator extends FrameLayout {
         if (childCount == 0) {
             lastWhichIndex = 0;
         } else if (lastWhichIndex >= childCount) {
-            setDisplayedChildIndex(childCount - 1);
+            setDisplayedChildIndex(childCount - 1, false);
         } else if (lastWhichIndex == index) {
-            setDisplayedChildIndex(lastWhichIndex);
+            setDisplayedChildIndex(lastWhichIndex, false);
         }
     }
 
@@ -125,7 +133,7 @@ public class ViewAnimator extends FrameLayout {
         if (getChildCount() == 0) {
             lastWhichIndex = 0;
         } else if (lastWhichIndex >= start && lastWhichIndex < start + count) {
-            setDisplayedChildIndex(lastWhichIndex);
+            setDisplayedChildIndex(lastWhichIndex, false);
         }
     }
 
@@ -167,7 +175,7 @@ public class ViewAnimator extends FrameLayout {
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
         lastWhichIndex = ss.lastWhichIndex;
-        setDisplayedChildIndex(lastWhichIndex);
+        setDisplayedChildIndex(lastWhichIndex, false);
     }
 
     @Override

@@ -114,8 +114,8 @@ public class CannyViewAnimator extends TransitionViewAnimator {
     }
 
     @Override
-    protected void changeVisibility(View inChild, View outChild) {
-        if (attachedList.get(outChild) && attachedList.get(inChild)) {
+    protected void changeVisibility(View inChild, View outChild, boolean withAnim) {
+        if (withAnim && attachedList.get(outChild) && attachedList.get(inChild)) {
             AnimatorSet animatorSet = new AnimatorSet();
             Animator inAnimator = mergeInAnimators(inChild, outChild);
             Animator outAnimator = mergeOutAnimators(inChild, outChild);
@@ -148,7 +148,7 @@ public class CannyViewAnimator extends TransitionViewAnimator {
             }
             animatorSet.start();
         } else {
-            super.changeVisibility(inChild, outChild);
+            super.changeVisibility(inChild, outChild, withAnim);
         }
     }
 

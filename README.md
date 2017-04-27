@@ -1,5 +1,4 @@
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-CannyViewAnimator-green
-.svg?style=flat)](https://android-arsenal.com/details/1/4302)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-CannyViewAnimator-green.svg?style=flat)](https://android-arsenal.com/details/1/4302)
 
 # CannyViewAnimator
 CannyViewAnimator is an enhanced version of ViewAnimator. It allows to use  Animators and
